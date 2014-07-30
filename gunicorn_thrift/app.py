@@ -13,6 +13,11 @@ from gunicorn.app.base import Application
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
+import gunicorn.workers
+gunicorn.workers.SUPPORTED_WORKERS.update({
+    'thrift_sync': 'gunicorn_thrift.sync_worker.SyncThriftWorker',
+    })
+
 
 class ThriftApplication(Application):
     def init(self, parser, opts, args):
