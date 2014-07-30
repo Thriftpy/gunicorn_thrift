@@ -22,7 +22,15 @@ class ThriftApplication(Application):
 
         self.tfactory = TTransport.TBufferedTransportFactory()
         self.pfactory = TBinaryProtocol.TBinaryProtocolAcceleratedFactory()
+        self.cfg.set(
+            "worker_class", "gunicorn_thrift.sync_worker.SyncThriftWorker"
+            )
 
     def load(self):
         self.chdir()
         return util.import_app(self.app_uri)
+
+
+def run():
+    from gunicorn_thrift.app import ThriftApplication
+    ThriftApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
