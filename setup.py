@@ -28,7 +28,7 @@ CLASSIFIERS = [
 # read dev requirements
 fname = os.path.join(os.path.dirname(__file__), 'requirements.txt')
 with open(fname) as f:
-    tests_require = list(map(lambda l: l.strip(), f.readlines()))
+    REQUIREMENTS = list(map(lambda l: l.strip(), f.readlines()))
 
 
 class PyTest(Command):
@@ -50,10 +50,8 @@ class PyTest(Command):
         errno = subprocess.call(basecmd + ['tests'])
         raise SystemExit(errno)
 
-
-REQUIREMENTS = []
-
 py_modules = []
+tests_require = ['pytest', 'pytest-cov']
 
 for root, folders, files in os.walk('gunicorn_thrift'):
     for f in files:
