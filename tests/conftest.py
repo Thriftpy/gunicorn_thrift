@@ -10,6 +10,10 @@ import subprocess
 
 @pytest.fixture(scope="session")
 def make_test_thrift(request):
+    try:
+        os.mkdir("tests/pingpong_sdk")
+    except (IOError, OSError):
+        pass
     exit_status = subprocess.call(
         "thrift --out tests/pingpong_sdk --gen "
         "py:new_style,utf8strings tests/pingpong.thrift".split()

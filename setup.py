@@ -5,8 +5,10 @@
 
 
 import os
-from setuptools import setup, Command
 import sys
+
+from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 from gunicorn_thrift import __version__
 
@@ -31,27 +33,21 @@ with open(fname) as f:
     REQUIREMENTS = list(map(lambda l: l.strip(), f.readlines()))
 
 
-class PyTest(Command):
-    user_options = [
-        ("cov", None, "measure coverage")
-    ]
-
-    def initialize_options(self):
-        self.cov = None
-
+class PyTest(TestCommand):
     def finalize_options(self):
-        pass
+        TestCommand.finalize_options(self)
+        self.test_args = [
+            'tests', '--cov', 'gunicorn_thrift', '--cov-report',
+            'term-missing', '--cov-config', '.coveragerc'
+            ]
+        self.test_suite = True
 
-    def run(self):
-        import subprocess
-        basecmd = [sys.executable, '-m', 'pytest']
-        if self.cov:
-            basecmd += ['--cov', 'gunicorn_thrift']
-        errno = subprocess.call(basecmd + ['tests'])
-        raise SystemExit(errno)
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
 
 py_modules = []
-tests_require = ['pytest', 'pytest-cov']
 
 for root, folders, files in os.walk('gunicorn_thrift'):
     for f in files:
@@ -76,7 +72,7 @@ setup(
     py_modules=py_modules,
     include_package_data=True,
 
-    tests_require=tests_require,
+    tests_require=['pytest', 'pytest-cov'],
     cmdclass={'test': PyTest},
 
     install_requires=REQUIREMENTS,
