@@ -72,7 +72,7 @@ setup(
     py_modules=py_modules,
     include_package_data=True,
 
-    tests_require=['pytest', 'pytest-cov'],
+    tests_require=['pytest', 'pytest-cov', 'gevent'],
     cmdclass={'test': PyTest},
 
     install_requires=REQUIREMENTS,
