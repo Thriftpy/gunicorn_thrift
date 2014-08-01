@@ -1,9 +1,12 @@
 language: python
 python:
-    - "2.7"
+  - "2.7"
+pcache: apt
 script:
-    - pip install -e .
-    - python setup.py test
+  - pip install -e .
+  - python setup.py test
+before_install:
+  - sudo apt-get install thrift-compiler
 after_success:
-    - pip install python-coveralls
-    - coveralls
+  - pip install python-coveralls
+  - coveralls
