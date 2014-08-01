@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from gunicorn.config import Setting, validate_string
+from gunicorn.config import Setting, validate_string, KNOWN_SETTINGS
 
 
 class ThriftTransportFactoryClass(Setting):
@@ -23,15 +23,4 @@ class ThriftProtocolFactoryClass(Setting):
     default = "thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory"
     desc = """\
         The factory class for thrift transport.
-    """
-
-
-class ThriftWorker(Setting):
-    name = "thrift_worker"
-    section = "Thrift"
-    cli = ["--thrift-worker"]
-    validator = validate_string
-    default = "thrift_sync"
-    desc = """\
-        Worker class for thrift, this will overwrite worker option.
     """
