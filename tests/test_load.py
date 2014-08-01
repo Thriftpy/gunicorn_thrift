@@ -26,12 +26,12 @@ def assert_ping():
 
 
 def test_one_worker(pingpong_thrift_server):
-    for i in range(9999):
+    for i in range(100):
         assert_ping()
 
 
 def test_two_worker(pingpong_thrift_server):
-    rounds = 9999
+    rounds = 100
     os.kill(pingpong_thrift_server.pid, signal.SIGTTIN)
     begin = time.time()
     jobs = [gevent.spawn(assert_ping) for i in range(rounds)]
