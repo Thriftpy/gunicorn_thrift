@@ -6,7 +6,8 @@ script:
   - pip install -e .
   - python setup.py test
 before_install:
-  - sudo apt-get install thrift-compiler
+  - sudo apt-get update -qq
+  - sudo apt-get install -y thrift-compiler
 after_success:
   - pip install python-coveralls
   - coveralls
