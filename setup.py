@@ -79,6 +79,6 @@ setup(
 
     entry_points="""
     [console_scripts]
-    gunicorn_thrift=gunicorn_thrift.app:run
+    gunicorn_thrift=gunicorn_thrift.thriftapp:run
     """
 )
