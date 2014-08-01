@@ -6,6 +6,7 @@ import signal
 import time
 
 import gevent
+import gevent.monkey
 gevent.monkey.patch_all()
 
 from thrift.transport import TSocket
@@ -21,18 +22,20 @@ def assert_ping():
     transport.open()
     server = PingService.Client(protocol)
     assert 'pong' == server.ping()
+    transport.close()
 
 
 def test_one_worker(pingpong_thrift_server):
-    assert_ping()
+    for i in range(9999):
+        assert_ping()
 
 
 def test_two_worker(pingpong_thrift_server):
-    rounds = 10000
+    rounds = 9999
     os.kill(pingpong_thrift_server.pid, signal.SIGTTIN)
     begin = time.time()
     jobs = [gevent.spawn(assert_ping) for i in range(rounds)]
-    gevent.joinall(jobs)
+    gevent.joinall(jobs, raise_error=True)
     end = time.time()
 
     print("Total time of %s calls:" % rounds, end - begin)

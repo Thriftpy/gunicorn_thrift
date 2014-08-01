@@ -38,7 +38,7 @@ class PyTest(TestCommand):
         TestCommand.finalize_options(self)
         self.test_args = [
             'tests', '--cov', 'gunicorn_thrift', '--cov-report',
-            'term-missing', '--cov-config', '.coveragerc'
+            'term-missing', '--cov-config', '.coveragerc',
             ]
         self.test_suite = True
 

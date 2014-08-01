@@ -13,3 +13,4 @@ def test_connectivity(pingpong_thrift_server):
     transport.open()
     server = PingService.Client(protocol)
     assert 'pong' == server.ping()
+    transport.close()
