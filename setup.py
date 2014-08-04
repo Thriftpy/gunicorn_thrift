@@ -10,7 +10,7 @@ from gunicorn_thrift import __version__
 
 
 CLASSIFIERS = [
-    'Development Status :: Pre Alpha',
+    'Development Status :: 3 - Alpha',
     'Environment :: Other Environment',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
@@ -21,7 +21,6 @@ CLASSIFIERS = [
     'Topic :: Network',
     'Topic :: Utilities',
     'Topic :: Software Development :: Libraries :: Python Modules',
-    'Topic :: Network :: Thrift',
 ]
 
 # read dev requirements
