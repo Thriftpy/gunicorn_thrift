@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -
-#
-# This file is part of gunicorn released under the MIT license.
-# See the NOTICE for more information.
-
 
 import os
 import sys
@@ -19,6 +15,7 @@ CLASSIFIERS = [
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Operating System :: MacOS :: MacOS X',
+    'Operating System :: POSIX',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.7',
     'Topic :: Network',
