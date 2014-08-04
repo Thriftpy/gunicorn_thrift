@@ -40,7 +40,7 @@ class ThriftApplication(Application):
         self.chdir()
         self.tfactory = utils.load_obj(self.cfg.thrift_transport_factory)()
         self.pfactory = utils.load_obj(self.cfg.thrift_protocol_factory)()
-        self.thrift_handler = self.load_thrift_app()
+        self.thrift_app = self.load_thrift_app()
         return lambda: 1
 
     def chdir(self):
