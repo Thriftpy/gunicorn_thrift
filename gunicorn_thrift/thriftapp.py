@@ -12,10 +12,15 @@ import config
 
 # register thrift workers
 import gunicorn.workers
-gunicorn.workers.SUPPORTED_WORKERS.update({
+
+AVAILABLE_THRIFT_WORKERS = {
     'thrift_sync': 'gunicorn_thrift.sync_worker.SyncThriftWorker',
-    'thrift_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftWorker'
-    })
+    'thrift_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftWorker',
+    'thriftpy_sync': 'gunicorn_thrift.sync_worker.SyncThriftPyWorker',
+    'thriftpy_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftPyWorker',
+    }
+
+gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS)
 
 
 class ThriftApplication(Application):
@@ -30,7 +35,7 @@ class ThriftApplication(Application):
             opts.worker_class = "thrift_sync"
 
         if opts.worker_class and \
-                opts.worker_class not in ("thrift_sync", "thrift_gevent"):
+                opts.worker_class not in AVAILABLE_THRIFT_WORKERS:
             raise ValueError
 
     def load_thrift_app(self):

@@ -20,6 +20,14 @@ gevent.monkey.patch_all()
 
 
 class GeventThriftWorker(GeventWorker):
+    def get_thrift_transports_and_protos(self, result):
+        itrans = self.app.tfactory.getTransport(result)
+        otrans = self.app.tfactory.getTransport(result)
+        iprot = self.app.pfactory.getProtocol(itrans)
+        oprot = self.app.pfactory.getProtocol(otrans)
+
+        return (itrans, otrans), (iprot, oprot)
+
     def handle(self, listener, client, addr):
         if self.app.cfg.thrift_client_timeout is not None:
             client.settimeout(self.app.cfg.thrift_client_timeout)
@@ -28,14 +36,12 @@ class GeventThriftWorker(GeventWorker):
         result.setHandle(client)
 
         try:
-            itrans = self.app.tfactory.getTransport(result)
-            otrans = self.app.tfactory.getTransport(result)
-            iprot = self.app.pfactory.getProtocol(itrans)
-            oprot = self.app.pfactory.getProtocol(otrans)
+            (itrans, otrans), (iprot, oprot) = \
+                self.get_thrift_transports_and_protos(result)
 
             try:
                 while True:
-                    self.handle_request(iprot, oprot)
+                    return self.app.thrift_app.process(iprot, oprot)
             except TTransport.TTransportException:
                 pass
         except Exception as e:
@@ -44,5 +50,12 @@ class GeventThriftWorker(GeventWorker):
             itrans.close()
             otrans.close()
 
-    def handle_request(self, iprot, oprot):
-        return self.app.thrift_app.process(iprot, oprot)
+
+class GeventThriftPyWorker(GeventThriftWorker):
+    def get_thrift_transports_and_protos(self, result):
+        itrans = self.app.tfactory.get_transport(result)
+        otrans = self.app.tfactory.get_transport(result)
+        iprot = self.app.pfactory.get_protocol(itrans)
+        oprot = self.app.pfactory.get_protocol(otrans)
+
+        return (itrans, otrans), (iprot, oprot)

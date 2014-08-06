@@ -16,6 +16,14 @@ from gunicorn.workers.sync import SyncWorker
 
 
 class SyncThriftWorker(SyncWorker):
+    def get_thrift_transports_and_protos(self, result):
+        itrans = self.app.tfactory.getTransport(result)
+        otrans = self.app.tfactory.getTransport(result)
+        iprot = self.app.pfactory.getProtocol(itrans)
+        oprot = self.app.pfactory.getProtocol(otrans)
+
+        return (itrans, otrans), (iprot, oprot)
+
     def handle(self, listener, client, addr):
         if self.app.cfg.thrift_client_timeout is not None:
             client.settimeout(self.app.cfg.thrift_client_timeout)
@@ -24,10 +32,8 @@ class SyncThriftWorker(SyncWorker):
         result.setHandle(client)
 
         try:
-            itrans = self.app.tfactory.getTransport(result)
-            otrans = self.app.tfactory.getTransport(result)
-            iprot = self.app.pfactory.getProtocol(itrans)
-            oprot = self.app.pfactory.getProtocol(otrans)
+            (itrans, otrans), (iprot, oprot) = \
+                self.get_thrift_transports_and_protos(result)
 
             try:
                 while True:
@@ -39,3 +45,13 @@ class SyncThriftWorker(SyncWorker):
         finally:
             itrans.close()
             otrans.close()
+
+
+class SyncThriftPyWorker(SyncThriftWorker):
+    def get_thrift_transports_and_protos(self, result):
+        itrans = self.app.tfactory.get_transport(result)
+        otrans = self.app.tfactory.get_transport(result)
+        iprot = self.app.pfactory.get_protocol(itrans)
+        oprot = self.app.pfactory.get_protocol(otrans)
+
+        return (itrans, otrans), (iprot, oprot)
