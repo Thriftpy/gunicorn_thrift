@@ -31,9 +31,6 @@ class ThriftApplication(Application):
 
         self.app_uri = args[0]
 
-        if opts.worker_class is None:
-            opts.worker_class = "thrift_sync"
-
         if opts.worker_class and \
                 opts.worker_class not in AVAILABLE_THRIFT_WORKERS:
             raise ValueError

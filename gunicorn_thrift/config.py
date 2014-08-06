@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-from gunicorn.config import Setting, validate_string, validate_pos_int
+from gunicorn.config import Setting, validate_string, validate_pos_int, WorkerClass
 
+WorkerClass.default = "thrift_sync"
 
 class ThriftTransportFactoryClass(Setting):
     name = "thrift_transport_factory"
