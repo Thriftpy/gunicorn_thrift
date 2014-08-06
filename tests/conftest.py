@@ -41,3 +41,20 @@ def pingpong_thrift_server(request, make_test_thrift):
     time.sleep(1)
 
     return gunicorn_server
+
+
+@pytest.fixture(scope="session")
+def timeout_pingpong_thrift_server(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.app:app", "--thrift-client-timeout=1",
+            "--bind", "0.0.0.0:8002", "--error-logfile", "-"],
+        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server

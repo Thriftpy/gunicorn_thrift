@@ -21,6 +21,9 @@ gevent.monkey.patch_all()
 
 class GeventThriftWorker(GeventWorker):
     def handle(self, listener, client, addr):
+        if self.app.cfg.thrift_client_timeout is not None:
+            client.settimeout(self.app.cfg.thrift_client_timeout)
+
         result = TSocket.TSocket()
         result.setHandle(client)
 
@@ -32,7 +35,7 @@ class GeventThriftWorker(GeventWorker):
 
             try:
                 while True:
-                    self.app.thrift_app.process(iprot, oprot)
+                    self.handle_request(iprot, oprot)
             except TTransport.TTransportException:
                 pass
         except Exception as e:
@@ -40,3 +43,6 @@ class GeventThriftWorker(GeventWorker):
         finally:
             itrans.close()
             otrans.close()
+
+    def handle_request(self, iprot, oprot):
+        return self.app.thrift_app.process(iprot, oprot)
