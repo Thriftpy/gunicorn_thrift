@@ -39,7 +39,7 @@ class GeventThriftWorker(GeventWorker):
             except TTransport.TTransportException:
                 pass
         except Exception as e:
-            logging.exception(e)
+            logger.exception(e)
         finally:
             itrans.close()
             otrans.close()
