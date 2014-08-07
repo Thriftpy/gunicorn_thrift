@@ -26,8 +26,8 @@ There are 4 types of workers avaiable.
 
 * `thrift_sync`: sync worker.
 * `thrift_gevent`: gevent worker.
-* `thriftpy_sync`: sync worker, adapted for [`thriftpy`](https://github.com/wooparadog/thriftpy)
-* `thriftpy_gevent`: gevent worker, adapted for [`thriftpy`](https://github.com/wooparadog/thriftpy)
+* `thriftpy_sync`: sync worker, adapted for [`thriftpy`](https://github.com/eleme/thriftpy)
+* `thriftpy_gevent`: gevent worker, adapted for [`thriftpy`](https://github.com/eleme/thriftpy)
 
 ### Transport factory
 
