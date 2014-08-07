@@ -41,7 +41,7 @@ class GeventThriftWorker(GeventWorker):
 
             try:
                 while True:
-                    return self.app.thrift_app.process(iprot, oprot)
+                    self.app.thrift_app.process(iprot, oprot)
             except TTransport.TTransportException:
                 pass
         except Exception as e:
