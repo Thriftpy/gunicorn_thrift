@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
-from gunicorn.config import Setting, validate_string, validate_pos_int, WorkerClass
+from gunicorn import six
+from gunicorn.config import Setting, validate_string, validate_pos_int,\
+    WorkerClass, validate_callable
 
 WorkerClass.default = "thrift_sync"
+
 
 class ThriftTransportFactoryClass(Setting):
     name = "thrift_transport_factory"
@@ -37,3 +40,21 @@ class ThriftClientTimeout(Setting):
     desc = """\
         Seconds to timeout a client if client is silent after this duration
     """
+
+
+class WorkerTerm(Setting):
+    name = "worker_term"
+    section = "Server Hooks"
+    validator = validate_callable(1)
+    type = six.callable
+
+    def worker_term(worker):
+        pass
+
+    default = staticmethod(worker_term)
+    desc = """\
+        Called just after a worker received SIGTERM, and about to gracefully shutdown.
+
+        The callable needs to accept one instance variable for the initialized
+        Worker.
+        """

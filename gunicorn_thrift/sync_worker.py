@@ -46,6 +46,11 @@ class SyncThriftWorker(SyncWorker):
             itrans.close()
             otrans.close()
 
+    def handle_exit(self, sig, frame):
+        ret = super(SyncThriftWorker, self).handle_exit(sig, frame)
+        self.cfg.worker_term(self)
+        return ret
+
 
 class SyncThriftPyWorker(SyncThriftWorker):
     def get_thrift_transports_and_protos(self, result):
