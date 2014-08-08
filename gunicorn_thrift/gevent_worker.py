@@ -6,17 +6,13 @@ logger = logging.getLogger(__name__)
 
 try:
     import thrift
-    import gevent
 except ImportError:
-    raise RuntimeError("You need thrift and gevent installed to use this worker.")
+    raise RuntimeError("You need thrift installed to use this worker.")
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 
 from gunicorn.workers.ggevent import GeventWorker
-
-import gevent.monkey
-gevent.monkey.patch_all()
 
 
 class GeventThriftWorker(GeventWorker):
