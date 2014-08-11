@@ -38,6 +38,7 @@ class SyncThriftWorker(SyncWorker):
             try:
                 while True:
                     self.app.thrift_app.process(iprot, oprot)
+                    self.notify()
             except TTransport.TTransportException:
                 pass
         except Exception as e:
