@@ -43,11 +43,20 @@ def test_server_disconnect_connection_when_gracefully_stopping(
     transport.open()
     server = PingService.Client(protocol)
     assert 'pong' == server.ping()
-    os.kill(volatile_pingpong_thrift_server.pid, signal.SIGTERM)
+
+    os.kill(volatile_pingpong_thrift_server.pid, signal.SIGHUP)  # restart
     time.sleep(1)
     with pytest.raises(PingService.AboutToShutDownException):
         server.ping()
     transport.close()
+
+    # Try again for new worker
+    transport = TSocket.TSocket('localhost', 8004)
+    transport = TTransport.TBufferedTransport(transport)
+    protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
+    transport.open()
+    server = PingService.Client(protocol)
+    assert 'pong' == server.ping()
 
 if __name__ == '__main__':
     test_connectivity(None)
