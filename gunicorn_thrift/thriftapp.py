@@ -16,8 +16,8 @@ import gunicorn.workers
 AVAILABLE_THRIFT_WORKERS = {
     'thrift_sync': 'gunicorn_thrift.sync_worker.SyncThriftWorker',
     'thrift_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftWorker',
-    'thriftpy_sync': 'gunicorn_thrift.sync_worker.SyncThriftPyWorker',
-    'thriftpy_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftPyWorker',
+    'thriftpy_sync': 'gunicorn_thrift.thriftpy_worker.SyncThriftPyWorker',
+    'thriftpy_gevent': 'gunicorn_thrift.thriftpy_worker.GeventThriftPyWorker',
     }
 
 gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS)

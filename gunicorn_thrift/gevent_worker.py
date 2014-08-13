@@ -50,13 +50,3 @@ class GeventThriftWorker(GeventWorker):
         ret = super(GeventThriftWorker, self).handle_exit(sig, frame)
         self.cfg.worker_term(self)
         return ret
-
-
-class GeventThriftPyWorker(GeventThriftWorker):
-    def get_thrift_transports_and_protos(self, result):
-        itrans = self.app.tfactory.get_transport(result)
-        otrans = self.app.tfactory.get_transport(result)
-        iprot = self.app.pfactory.get_protocol(itrans)
-        oprot = self.app.pfactory.get_protocol(otrans)
-
-        return (itrans, otrans), (iprot, oprot)
