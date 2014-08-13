@@ -22,13 +22,13 @@ class SyncThriftPyWorker(SyncWorker):
             client.settimeout(self.app.cfg.thrift_client_timeout)
 
         result = TSocket()
-        result.setHandle(client)
+        result.set_handle(client)
 
         try:
-            itrans = self.app.tfactory.getTransport(result)
-            otrans = self.app.tfactory.getTransport(result)
-            iprot = self.app.pfactory.getProtocol(itrans)
-            oprot = self.app.pfactory.getProtocol(otrans)
+            itrans = self.app.tfactory.get_transport(result)
+            otrans = self.app.tfactory.get_transport(result)
+            iprot = self.app.pfactory.get_protocol(itrans)
+            oprot = self.app.pfactory.get_protocol(otrans)
 
             try:
                 while True:
@@ -54,7 +54,7 @@ class GeventThriftPyWorker(GeventWorker):
             client.settimeout(self.app.cfg.thrift_client_timeout)
 
         result = TSocket()
-        result.setHandle(client)
+        result.set_handle(client)
 
         try:
             itrans = self.app.tfactory.get_transport(result)
