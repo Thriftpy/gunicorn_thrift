@@ -1,7 +1,7 @@
 gunicorn_thrift
 ===============
 
-[![Build Status](https://travis-ci.org/wooparadog/gunicorn_thrift.svg?branch=master)](https://travis-ci.org/wooparadog/gunicorn_thrift)
+[![Build Status](https://travis-ci.org/eleme/gunicorn_thrift.svg?branch=master)](https://travis-ci.org/eleme/gunicorn_thrift)
 
 Thrift app and worker for gunicorn!
 
@@ -13,10 +13,32 @@ Thrift app and worker for gunicorn!
 
 ## Examples
 
-```bash
-% gunicorn_thrift tests.app:app -k thrift_sync
-% gunicorn_thrift tests.app:app -k thrift_gevent
-```
+1. Generate thrift files:
+    ```bash
+    % thrift --out tests/pingpong_sdk --gen py:new_style,utf8strings tests/pingpong.thrift
+    ```
+
+2. Write thrift app.
+    ```python
+    #! /usr/bin/env python
+    # tests/app.py
+    # -*- coding: utf-8 -*-
+    
+    import os
+    from pingpong_sdk.pingpong import PingService
+    
+    class PingpongServer(object):
+        def ping(self):
+            return "pong"
+    
+    app = PingService.Processor(PingpongServer())
+    ```
+
+3. Fire up app.
+    ```bash
+    % gunicorn_thrift tests.app:app -k thrift_sync
+    % gunicorn_thrift tests.app:app -k thrift_gevent
+    ```
 
 ## Configs
 
