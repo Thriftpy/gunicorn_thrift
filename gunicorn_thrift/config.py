@@ -53,8 +53,27 @@ class WorkerTerm(Setting):
 
     default = staticmethod(worker_term)
     desc = """\
-        Called just after a worker received SIGTERM, and about to gracefully shutdown.
+        Called just after a worker received SIGTERM, and about to gracefully
+        shutdown.
 
         The callable needs to accept one instance variable for the initialized
         Worker.
+        """
+
+
+class ClientConnected(Setting):
+    name = "on_connected"
+    section = "Server Hooks"
+    validator = validate_callable(2)
+    type = six.callable
+
+    def on_connected(worker, addr):
+        pass
+
+    default = staticmethod(on_connected)
+    desc = """\
+        Called just after a connection is made.
+
+        The callable needs to accept two instance variable for the worker and
+        the connected client address.
         """
