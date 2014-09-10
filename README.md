@@ -19,6 +19,7 @@ Thrift app and worker for gunicorn!
     ```
 
 2. Write thrift app.
+
     ```python
     #! /usr/bin/env python
     # tests/app.py
@@ -44,6 +45,10 @@ Thrift app and worker for gunicorn!
 
 ### Workers
 
+Parameter: `-k`, `--worker-class`  
+Config file: `worker_class`  
+Default: `thrift_sync`
+
 There are 4 types of workers avaiable.
 
 * `thrift_sync`: sync worker.
@@ -51,21 +56,33 @@ There are 4 types of workers avaiable.
 * `thriftpy_sync`: sync worker, adapted for [`thriftpy`](https://github.com/eleme/thriftpy)
 * `thriftpy_gevent`: gevent worker, adapted for [`thriftpy`](https://github.com/eleme/thriftpy)
 
+note: If you wants to use `thriftpy_sync` or `thriftpy_gevent`, make sure the following:
+
+* `--thrift-protocol-factory` should be set to either `thriftpy.protocol:TCyBinaryProtocolFactory` or `thriftpy.protocol:TBinaryProtocolFactory`
+* `--thrift-transport-factory` should be set to either `thriftpy.transport:TCyBufferedTransportFactory` or `thriftpy.transport:TBufferedTransportFactory`
+
+
 ### Transport factory
 
 The transport factory to use for handling connections.
 
-default: `thrift.transport.TTransport:TBufferedTransportFactory`
+Parameter: `--thrift-transport-factory`  
+Config file: `thrift_transport_factory`  
+Default: `thrift.transport.TTransport:TBufferedTransportFactory`
 
 
 ### Protocol factory
 
 The protocol factory to use for parsing requests.
 
-default: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`
+Parameter: `--thrift-protocol-factory`  
+Config file: `thrift_protocol_factory`  
+Default: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`
 
 ### Client timeout
 
 Seconds to timeout a client if it is silent after this duration.
 
-default: `None` (Never time out a client)
+Parameter: `--thrift-client-timeout`  
+Config file: `thrift_client_timeout`  
+Default: `None` (Never time out a client)

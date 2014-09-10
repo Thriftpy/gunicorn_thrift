@@ -57,4 +57,5 @@ def test_server_disconnect_connection_when_gracefully_stopping(
     assert 'pong' == server.ping()
 
 if __name__ == '__main__':
-    test_connectivity(None)
+    from pingpong_sdk.pingpong import PingService
+    test_connectivity(PingService, None)
