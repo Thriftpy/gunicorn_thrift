@@ -58,6 +58,7 @@ There are 4 types of workers avaiable.
 
 note: If you wants to use `thriftpy_sync` or `thriftpy_gevent`, make sure the following:
 
+* Version of `thriftpy` should be higher than `0.1.10`.
 * `--thrift-protocol-factory` should be set to either `thriftpy.protocol:TCyBinaryProtocolFactory` or `thriftpy.protocol:TBinaryProtocolFactory`
 * `--thrift-transport-factory` should be set to either `thriftpy.transport:TCyBufferedTransportFactory` or `thriftpy.transport:TBufferedTransportFactory`
 
