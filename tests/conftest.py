@@ -75,3 +75,9 @@ def volatile_pingpong_thrift_server(request, make_test_thrift):
     time.sleep(1)
 
     return gunicorn_server
+
+
+@pytest.fixture
+def PingService(make_test_thrift):
+    from pingpong_sdk.pingpong import PingService
+    return PingService
