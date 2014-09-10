@@ -3,7 +3,9 @@ python:
   - "2.7"
 pcache: apt
 script:
-  - pip install -e .
+  - pip install -r requirements.txt
+  - pip install -r test_requirements.txt
+  - python setup.py develop
   - python setup.py test
 before_install:
   - sudo add-apt-repository -y ppa:wnoronha/thrift

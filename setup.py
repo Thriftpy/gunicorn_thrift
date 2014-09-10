@@ -27,6 +27,11 @@ fname = os.path.join(os.path.dirname(__file__), 'requirements.txt')
 with open(fname) as f:
     REQUIREMENTS = list(map(lambda l: l.strip(), f.readlines()))
 
+# read dev requirements
+fname = os.path.join(os.path.dirname(__file__), 'test_requirements.txt')
+with open(fname) as f:
+    TEST_REQUIREMENTS = list(map(lambda l: l.strip(), f.readlines()))
+
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -67,7 +72,7 @@ setup(
     py_modules=py_modules,
     include_package_data=True,
 
-    tests_require=['pytest', 'pytest-cov', 'gevent'],
+    tests_require=TEST_REQUIREMENTS,
     cmdclass={'test': PyTest},
 
     install_requires=REQUIREMENTS,
