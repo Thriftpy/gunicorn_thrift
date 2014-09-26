@@ -66,6 +66,8 @@ setup(
     author='Haochuan Guo',
     author_email='guohaochuan@gmail.com',
     license='MIT',
+    url='https://github.com/eleme/gunicorn_thrift',
+    long_description=open("README.md").read(),
 
     classifiers=CLASSIFIERS,
     zip_safe=False,
