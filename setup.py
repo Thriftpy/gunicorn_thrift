@@ -18,17 +18,37 @@ CLASSIFIERS = [
     'Operating System :: POSIX',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.2',
+    'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
     'Topic :: Utilities',
     'Topic :: Software Development :: Libraries :: Python Modules',
 ]
 
+PY_VERSION = sys.version_info[:3]
+
 # read dev requirements
-fname = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+if PY_VERSION < (2, 7, 0):
+    raise RuntimeError('Python < 2.7 is unsupported')
+elif PY_VERSION < (3, 2, 0):
+    raise RuntimeError('Python 3 < 3.2 is unsupported')
+
+if PY_VERSION <= (2, 7, 9):
+    fname = os.path.join(os.path.dirname(__file__), 'requirements_py27.txt')
+else:
+    fname = os.path.join(os.path.dirname(__file__), 'requirements_py3x.txt')
+
 with open(fname) as f:
     REQUIREMENTS = list(map(lambda l: l.strip(), f.readlines()))
 
 # read dev requirements
-fname = os.path.join(os.path.dirname(__file__), 'test_requirements.txt')
+if PY_VERSION <= (2, 7, 9):
+    fname = os.path.join(os.path.dirname(__file__),
+                         'test_requirements_py27.txt')
+else:
+    fname = os.path.join(os.path.dirname(__file__),
+                         'test_requirements_py3x.txt')
+
 with open(fname) as f:
     TEST_REQUIREMENTS = list(map(lambda l: l.strip(), f.readlines()))
 

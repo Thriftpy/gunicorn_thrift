@@ -3,24 +3,39 @@
 import os
 import sys
 
-import utils
-
 from gunicorn.app.base import Application
-
-# register thrift specific options
-import config
-
-# register thrift workers
 import gunicorn.workers
 
-AVAILABLE_THRIFT_WORKERS = {
+# `config` is unused in this module but must be imported to register config
+# options with gunicorn
+from . import config
+from . import utils
+
+
+PY_VERSION = sys.version_info[:3]
+
+# register thrift workers
+AVAILABLE_THRIFT_WORKERS_PY27 = {
     'thrift_sync': 'gunicorn_thrift.sync_worker.SyncThriftWorker',
     'thrift_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftWorker',
-    'thriftpy_sync': 'gunicorn_thrift.thriftpy_worker.SyncThriftPyWorker',
-    'thriftpy_gevent': 'gunicorn_thrift.thriftpy_worker.GeventThriftPyWorker',
+    'thriftpy_sync': \
+        'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
+    'thriftpy_gevent': \
+        'gunicorn_thrift.thriftpy_gevent_worker.GeventThriftPyWorker',
     }
 
-gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS)
+AVAILABLE_THRIFT_WORKERS_PY3X = {
+    'thriftpy_sync': \
+        'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
+}
+
+
+if PY_VERSION <= (2, 7, 9):
+    gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS_PY27)
+    AVAILABLE_THRIFT_WORKERS = AVAILABLE_THRIFT_WORKERS_PY27
+else:
+    gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS_PY3X)
+    AVAILABLE_THRIFT_WORKERS = AVAILABLE_THRIFT_WORKERS_PY3X
 
 
 class ThriftApplication(Application):
