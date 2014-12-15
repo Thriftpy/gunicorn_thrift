@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+
 from pingpong_sdk.pingpong import PingService
 
 
