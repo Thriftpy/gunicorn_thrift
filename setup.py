@@ -30,7 +30,7 @@ PY_VERSION = sys.version_info[:3]
 # read dev requirements
 if PY_VERSION < (2, 7, 0):
     raise RuntimeError('Python < 2.7 is unsupported')
-elif PY_VERSION < (3, 2, 0):
+elif PY_VERSION >= (3, 0, 0) and PY_VERSION < (3, 2, 0):
     raise RuntimeError('Python 3 < 3.2 is unsupported')
 
 if PY_VERSION <= (2, 7, 9):
