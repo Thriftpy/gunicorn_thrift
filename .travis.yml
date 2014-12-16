@@ -1,10 +1,13 @@
 language: python
 python:
   - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
 pcache: apt
+install:
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then pip install -r requirements_py27.txt; else pip install -r requirements_py3x.txt; fi
 script:
-  - pip install -r requirements.txt
-  - pip install -r test_requirements.txt
   - python setup.py develop
   - python setup.py test
 before_install:
