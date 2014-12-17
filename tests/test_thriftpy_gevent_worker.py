@@ -8,7 +8,8 @@ import time
 import pytest
 from thriftpy.transport import TTransportException
 
-from . import AboutToShutDownException, make_client, requires_py27
+from . import AboutToShutDownException, make_client
+from .six import requires_py27
 
 
 @requires_py27
