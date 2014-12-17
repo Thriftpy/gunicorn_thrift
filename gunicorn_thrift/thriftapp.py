@@ -10,32 +10,12 @@ import gunicorn.workers
 # options with gunicorn
 from . import config
 from . import utils
+from .six import AVAILABLE_WORKERS
 
-
-PY_VERSION = sys.version_info[:3]
 
 # register thrift workers
-AVAILABLE_THRIFT_WORKERS_PY27 = {
-    'thrift_sync': 'gunicorn_thrift.sync_worker.SyncThriftWorker',
-    'thrift_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftWorker',
-    'thriftpy_sync': \
-        'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
-    'thriftpy_gevent': \
-        'gunicorn_thrift.thriftpy_gevent_worker.GeventThriftPyWorker',
-    }
 
-AVAILABLE_THRIFT_WORKERS_PY3X = {
-    'thriftpy_sync': \
-        'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
-}
-
-
-if PY_VERSION <= (2, 7, 9):
-    gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS_PY27)
-    AVAILABLE_THRIFT_WORKERS = AVAILABLE_THRIFT_WORKERS_PY27
-else:
-    gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS_PY3X)
-    AVAILABLE_THRIFT_WORKERS = AVAILABLE_THRIFT_WORKERS_PY3X
+gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_WORKERS)
 
 
 class ThriftApplication(Application):
@@ -47,7 +27,7 @@ class ThriftApplication(Application):
         self.app_uri = args[0]
 
         if opts.worker_class and \
-                opts.worker_class not in AVAILABLE_THRIFT_WORKERS:
+                opts.worker_class not in AVAILABLE_WORKERS:
             raise ValueError
 
     def load_thrift_app(self):
