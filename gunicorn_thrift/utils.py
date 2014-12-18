@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
+import importlib
 from gunicorn.errors import AppImportError
 
 
@@ -13,7 +13,7 @@ def load_obj(import_path):
     module, obj = parts[0], parts[1]
 
     try:
-        __import__(module)
+        mod = importlib.import_module(module)
     except ImportError:
         if module.endswith(".py") and os.path.exists(module):
             raise ImportError(
@@ -23,14 +23,9 @@ def load_obj(import_path):
         else:
             raise
 
-    mod = sys.modules[module]
-
     try:
-        app = eval(obj, mod.__dict__)
-    except NameError:
-        raise AppImportError("Failed to find application: %r" % module)
-
-    if app is None:
+        app = getattr(mod, obj)
+    except AttributeError:
         raise AppImportError("Failed to find application object: %r" % obj)
 
     return app
