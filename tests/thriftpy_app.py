@@ -1,13 +1,23 @@
 #! /usr/bin/env python
-# tests/app.py
 # -*- coding: utf-8 -*-
+
+import os
 
 import thriftpy
 from thriftpy.thrift import TProcessor
 
-class PingPongDispatcher(object):
-    def ping(self):
-        return "pong"
+from . import AboutToShutDownException
+
 
 pingpong_thrift = thriftpy.load("pingpong.thrift")
-app = TProcessor(pingpong_thrift.PingService, PingPongDispatcher())
+PingService = pingpong_thrift.PingService
+
+
+class PingpongServer(object):
+    def ping(self):
+        if os.environ.get('about_to_shutdown') == '1':
+            raise AboutToShutDownException
+        return "pong"
+
+
+app = TProcessor(pingpong_thrift.PingService, PingpongServer())
