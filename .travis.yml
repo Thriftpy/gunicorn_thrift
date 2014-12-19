@@ -7,6 +7,8 @@ env:
   - TOXENV=py32
   - TOXENV=py33
   - TOXENV=py34
+script:
+  - tox
 before_install:
   - sudo add-apt-repository -y ppa:wnoronha/thrift
   - sudo apt-get update -qq
