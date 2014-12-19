@@ -16,8 +16,8 @@ def test_connectivity(PingService, pingpong_thrift_server):
     transport = TTransport.TBufferedTransport(transport)
     protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
     transport.open()
-    server = PingService.Client(protocol)
-    assert 'pong' == server.ping()
+    client = PingService.Client(protocol)
+    assert 'pong' == client.ping()
     transport.close()
 
 
@@ -26,10 +26,10 @@ def test_client_timeout(PingService, timeout_pingpong_thrift_server):
     transport = TTransport.TBufferedTransport(transport)
     protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
     transport.open()
-    server = PingService.Client(protocol)
+    client = PingService.Client(protocol)
     time.sleep(2)
     with pytest.raises(TSocket.TTransportException):
-        assert 'pong' == server.ping()
+        assert 'pong' == client.ping()
         transport.close()
 
 
@@ -39,13 +39,13 @@ def test_server_disconnect_connection_when_gracefully_stopping(
     transport = TTransport.TBufferedTransport(transport)
     protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
     transport.open()
-    server = PingService.Client(protocol)
-    assert 'pong' == server.ping()
+    client = PingService.Client(protocol)
+    assert 'pong' == client.ping()
 
     os.kill(volatile_pingpong_thrift_server.pid, signal.SIGHUP)  # restart
     time.sleep(1)
     with pytest.raises(PingService.AboutToShutDownException):
-        server.ping()
+        client.ping()
     transport.close()
 
     # Try again for new worker
@@ -53,8 +53,8 @@ def test_server_disconnect_connection_when_gracefully_stopping(
     transport = TTransport.TBufferedTransport(transport)
     protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
     transport.open()
-    server = PingService.Client(protocol)
-    assert 'pong' == server.ping()
+    client = PingService.Client(protocol)
+    assert 'pong' == client.ping()
 
 if __name__ == '__main__':
     from pingpong_sdk.pingpong import PingService

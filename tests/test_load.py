@@ -20,8 +20,8 @@ def assert_ping():
     transport = TTransport.TBufferedTransport(transport)
     protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
     transport.open()
-    server = PingService.Client(protocol)
-    assert 'pong' == server.ping()
+    client = PingService.Client(protocol)
+    assert 'pong' == client.ping()
     transport.close()
 
 
