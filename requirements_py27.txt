@@ -1,0 +1,6 @@
+setproctitle==1.1.8
+gevent==1.0.1
+gunicorn==19.1.1
+wsgiref==0.1.2
+thrift>=0.9.0
+thriftpy>=0.1.10

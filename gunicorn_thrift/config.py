@@ -5,7 +5,10 @@ from gunicorn import six
 from gunicorn.config import Setting, validate_string, validate_pos_int,\
     WorkerClass, validate_callable
 
-WorkerClass.default = "thrift_sync"
+from .six import DEFAULT_WORKER, DEFAULT_TRANSPORT, DEFAULT_PROTOCOL
+
+
+WorkerClass.default = DEFAULT_WORKER
 
 
 class ThriftTransportFactoryClass(Setting):
@@ -13,7 +16,7 @@ class ThriftTransportFactoryClass(Setting):
     section = "Thrift"
     cli = ["--thrift-transport-factory"]
     validator = validate_string
-    default = "thrift.transport.TTransport:TBufferedTransportFactory"
+    default = DEFAULT_TRANSPORT
     desc = """\
         The factory class for thrift transport.
     """
@@ -24,8 +27,7 @@ class ThriftProtocolFactoryClass(Setting):
     section = "Thrift"
     cli = ["--thrift-protocol-factory"]
     validator = validate_string
-    default = \
-        "thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory"
+    default = DEFAULT_PROTOCOL
     desc = """\
         The factory class for thrift transport.
     """

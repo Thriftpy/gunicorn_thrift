@@ -3,24 +3,19 @@
 import os
 import sys
 
-import utils
-
 from gunicorn.app.base import Application
-
-# register thrift specific options
-import config
-
-# register thrift workers
 import gunicorn.workers
 
-AVAILABLE_THRIFT_WORKERS = {
-    'thrift_sync': 'gunicorn_thrift.sync_worker.SyncThriftWorker',
-    'thrift_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftWorker',
-    'thriftpy_sync': 'gunicorn_thrift.thriftpy_worker.SyncThriftPyWorker',
-    'thriftpy_gevent': 'gunicorn_thrift.thriftpy_worker.GeventThriftPyWorker',
-    }
+# `config` is unused in this module but must be imported to register config
+# options with gunicorn
+from . import config
+from . import utils
+from .six import AVAILABLE_WORKERS
 
-gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_THRIFT_WORKERS)
+
+# register thrift workers
+
+gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_WORKERS)
 
 
 class ThriftApplication(Application):
@@ -32,7 +27,7 @@ class ThriftApplication(Application):
         self.app_uri = args[0]
 
         if opts.worker_class and \
-                opts.worker_class not in AVAILABLE_THRIFT_WORKERS:
+                opts.worker_class not in AVAILABLE_WORKERS:
             raise ValueError
 
     def load_thrift_app(self):
