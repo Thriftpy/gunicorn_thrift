@@ -6,7 +6,7 @@ import time
 
 import pytest
 
-from . import requires_py27
+from .six import requires_py27
 
 
 @requires_py27
