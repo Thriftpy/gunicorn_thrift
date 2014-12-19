@@ -53,7 +53,6 @@ def pingpong_thrift_server_sync(request, make_test_thrift):
     gunicorn_server = subprocess.Popen(
         ["gunicorn_thrift", "tests.thrift_app:app", "-c",
          "tests/gunicorn_config.py", "-k", "thrift_sync"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
     def shutdown():
@@ -70,7 +69,6 @@ def timeout_pingpong_thrift_server_sync(request, make_test_thrift):
     gunicorn_server = subprocess.Popen(
         ["gunicorn_thrift", "tests.thrift_app:app", "-c",
          "tests/gunicorn_timeout_config.py", "-k", "thrift_sync"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
     def shutdown():
@@ -88,7 +86,6 @@ def volatile_pingpong_thrift_server_sync(request, make_test_thrift):
         ["gunicorn_thrift", "tests.thrift_app:app", "-c",
          "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
          "thrift_sync"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
     def shutdown():
@@ -108,7 +105,6 @@ def pingpong_thrift_server_gevent(request, make_test_thrift):
     gunicorn_server = subprocess.Popen(
         ["gunicorn_thrift", "tests.thrift_app:app", "-c",
          "tests/gunicorn_config.py", "-k", "thrift_gevent"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
     def shutdown():
@@ -125,7 +121,6 @@ def timeout_pingpong_thrift_server_gevent(request, make_test_thrift):
     gunicorn_server = subprocess.Popen(
         ["gunicorn_thrift", "tests.thrift_app:app", "-c",
          "tests/gunicorn_timeout_config.py", "-k", "thrift_gevent"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
     def shutdown():
@@ -143,7 +138,6 @@ def volatile_pingpong_thrift_server_gevent(request, make_test_thrift):
         ["gunicorn_thrift", "tests.thrift_app:app", "-c",
          "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
          "thrift_gevent"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
     def shutdown():
@@ -166,8 +160,8 @@ def pingpong_thriftpy_server_sync(request):
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
          "--thrift-transport-factor",
-         "thriftpy.transport.TBufferedTransportFactory"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
         )
 
     def shutdown():
@@ -187,8 +181,8 @@ def timeout_pingpong_thriftpy_server_sync(request):
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
          "--thrift-transport-factor",
-         "thriftpy.transport.TBufferedTransportFactory"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
         )
 
     def shutdown():
@@ -208,8 +202,8 @@ def volatile_pingpong_thriftpy_server_sync(request):
          "thriftpy_sync", "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
          "--thrift-transport-factor",
-         "thriftpy.transport.TBufferedTransportFactory"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+         "thriftpy.transport:TBufferedTransportFactory"
+         "--log-file", "-"],
         )
 
     def shutdown():
@@ -232,8 +226,8 @@ def pingpong_thriftpy_server_gevent(request, make_test_thrift):
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
          "--thrift-transport-factor",
-         "thriftpy.transport.TBufferedTransportFactory"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
         )
 
     def shutdown():
@@ -253,8 +247,8 @@ def timeout_pingpong_thriftpy_server_gevent(request, make_test_thrift):
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
          "--thrift-transport-factor",
-         "thriftpy.transport.TBufferedTransportFactory"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
         )
 
     def shutdown():
@@ -274,8 +268,8 @@ def volatile_pingpong_thriftpy_server_gevent(request, make_test_thrift):
          "thriftpy_gevent", "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
          "--thrift-transport-factor",
-         "thriftpy.transport.TBufferedTransportFactory"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
         )
 
     def shutdown():

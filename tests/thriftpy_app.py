@@ -8,8 +8,12 @@ from thriftpy.thrift import TProcessor
 
 from . import AboutToShutDownException
 
-
-pingpong_thrift = thriftpy.load("pingpong.thrift")
+pingpong_thrift = thriftpy.load(
+    os.path.join(
+        os.path.dirname(__file__),
+        "pingpong.thrift"
+        )
+    )
 PingService = pingpong_thrift.PingService
 
 
