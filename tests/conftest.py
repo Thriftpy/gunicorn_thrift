@@ -9,6 +9,24 @@ import subprocess
 
 
 @pytest.fixture(scope="session")
+def TSocket():
+    from thrift.transport import TSocket as _TSocket
+    return _TSocket
+
+
+@pytest.fixture(scope="session")
+def TTransport():
+    from thrift.transport import TTransport as _TTransport
+    return _TTransport
+
+
+@pytest.fixture(scope="session")
+def TBinaryProtocol():
+    from thrift.protocol import TBinaryProtocol as _TBinaryProtocol
+    return _TBinaryProtocol
+
+
+@pytest.fixture(scope="session")
 def make_test_thrift(request):
     try:
         os.mkdir("tests/pingpong_sdk")
@@ -27,11 +45,14 @@ def make_test_thrift(request):
     request.addfinalizer(rm)
 
 
+#
+# sync worker fixtures
+#
 @pytest.fixture(scope="session")
-def pingpong_thrift_server(request, make_test_thrift):
+def pingpong_thrift_server_sync(request, make_test_thrift):
     gunicorn_server = subprocess.Popen(
-        ["gunicorn_thrift", "tests.app:app", "-c", "tests/gunicorn_config.py"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+        ["gunicorn_thrift", "tests.thrift_app:app", "-c",
+         "tests/gunicorn_config.py", "-k", "thrift_sync"],
         )
 
     def shutdown():
@@ -44,11 +65,10 @@ def pingpong_thrift_server(request, make_test_thrift):
 
 
 @pytest.fixture(scope="session")
-def timeout_pingpong_thrift_server(request, make_test_thrift):
+def timeout_pingpong_thrift_server_sync(request, make_test_thrift):
     gunicorn_server = subprocess.Popen(
-        ["gunicorn_thrift", "tests.app:app", "-c",
-            "tests/gunicorn_timeout_config.py"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+        ["gunicorn_thrift", "tests.thrift_app:app", "-c",
+         "tests/gunicorn_timeout_config.py", "-k", "thrift_sync"],
         )
 
     def shutdown():
@@ -61,11 +81,195 @@ def timeout_pingpong_thrift_server(request, make_test_thrift):
 
 
 @pytest.fixture
-def volatile_pingpong_thrift_server(request, make_test_thrift):
+def volatile_pingpong_thrift_server_sync(request, make_test_thrift):
     gunicorn_server = subprocess.Popen(
-        ["gunicorn_thrift", "tests.app:app", "-c", "tests/gunicorn_config.py",
-            "--bind", "0.0.0.0:8004"],
-        stdin=subprocess.PIPE, stderr=subprocess.PIPE
+        ["gunicorn_thrift", "tests.thrift_app:app", "-c",
+         "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
+         "thrift_sync"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+#
+# gevent worker fixtures
+#
+@pytest.fixture(scope="session")
+def pingpong_thrift_server_gevent(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thrift_app:app", "-c",
+         "tests/gunicorn_config.py", "-k", "thrift_gevent"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture(scope="session")
+def timeout_pingpong_thrift_server_gevent(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thrift_app:app", "-c",
+         "tests/gunicorn_timeout_config.py", "-k", "thrift_gevent"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture
+def volatile_pingpong_thrift_server_gevent(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thrift_app:app", "-c",
+         "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
+         "thrift_gevent"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+#
+# thriftpy sync worker fixtures
+#
+@pytest.fixture(scope="session")
+def pingpong_thriftpy_server_sync(request):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_config.py", "-k", "thriftpy_sync",
+         "--thrift-protocol-factory",
+         "thriftpy.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factor",
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture(scope="session")
+def timeout_pingpong_thriftpy_server_sync(request):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_timeout_config.py", "-k", "thriftpy_sync",
+         "--thrift-protocol-factory",
+         "thriftpy.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factor",
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture
+def volatile_pingpong_thriftpy_server_sync(request):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
+         "thriftpy_sync", "--thrift-protocol-factory",
+         "thriftpy.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factor",
+         "thriftpy.transport:TBufferedTransportFactory"
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+#
+# thriftpy gevent worker fixtures
+#
+@pytest.fixture(scope="session")
+def pingpong_thriftpy_server_gevent(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_config.py", "-k", "thriftpy_gevent",
+         "--thrift-protocol-factory",
+         "thriftpy.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factor",
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture(scope="session")
+def timeout_pingpong_thriftpy_server_gevent(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_timeout_config.py", "-k", "thriftpy_gevent",
+         "--thrift-protocol-factory",
+         "thriftpy.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factor",
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture
+def volatile_pingpong_thriftpy_server_gevent(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
+         "thriftpy_gevent", "--thrift-protocol-factory",
+         "thriftpy.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factor",
+         "thriftpy.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
         )
 
     def shutdown():
@@ -81,3 +285,10 @@ def volatile_pingpong_thrift_server(request, make_test_thrift):
 def PingService(make_test_thrift):
     from pingpong_sdk.pingpong import PingService
     return PingService
+
+
+@pytest.fixture
+def PingServiceThriftpy(make_test_thrift):
+    import thriftpy
+    pingpong_thrift = thriftpy.load("tests/pingpong.thrift")
+    return pingpong_thrift.PingService

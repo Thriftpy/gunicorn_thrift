@@ -11,7 +11,15 @@ Thrift app and worker for gunicorn!
 * manage worker number at runtime.
 * and everything else `gunicorn` has to offer.
 
+## Supported Platforms
+
+* Python 2.7, all worker classes
+* Python 3.2+, `thriftpy_sync` worker class (neither gevent nor code generated
+  using the Thrift toolkit are supported on Python 3)
+
 ## Examples
+
+### Using `thrift`
 
 1. Generate thrift files:
     ```bash
@@ -24,14 +32,15 @@ Thrift app and worker for gunicorn!
     #! /usr/bin/env python
     # tests/app.py
     # -*- coding: utf-8 -*-
-    
-    import os
+
     from pingpong_sdk.pingpong import PingService
-    
+
     class PingpongServer(object):
         def ping(self):
+            if os.environ.get('about_to_shutdown') == '1':
+                raise PingService.AboutToShutDownException
             return "pong"
-    
+
     app = PingService.Processor(PingpongServer())
     ```
 
@@ -41,13 +50,44 @@ Thrift app and worker for gunicorn!
     % gunicorn_thrift tests.app:app -k thrift_gevent
     ```
 
+### Using `thriftpy`
+
+1. Write thrift app.
+
+    ```python
+    #! /usr/bin/env python
+    # tests/app.py
+    # -*- coding: utf-8 -*-
+
+    import thriftpy
+    from thriftpy.thrift import TProcessor
+
+    class PingPongDispatcher(object):
+        def ping(self):
+            return "pong"
+
+    pingpong_thrift = thriftpy.load("pingpong.thrift")
+    app = TProcessor(pingpong_thrift.PingService, PingPongDispatcher())
+    ```
+
+2. Fire up app.
+
+    ```bash
+    % gunicorn_thrift tests.thriftpy_app:app -k thriftpy_sync \
+      --thrift-protocol-factory \
+        thriftpy.protocol:TCyBinaryProtocolFactory \
+      --thrift-transport-factory \
+        thriftpy.transport:TCyBufferedTransportFactory
+    ```
+
 ## Configs
 
 ### Workers
 
-Parameter: `-k`, `--worker-class`  
-Config file: `worker_class`  
-Default: `thrift_sync`
+Parameter: `-k`, `--worker-class`
+Config file: `worker_class`
+Default 2.7: `thrift_sync`
+Default 3.2+: `thriftpy_sync`
 
 There are 4 types of workers avaiable.
 
@@ -56,7 +96,7 @@ There are 4 types of workers avaiable.
 * `thriftpy_sync`: sync worker, adapted for [`thriftpy`](https://github.com/eleme/thriftpy)
 * `thriftpy_gevent`: gevent worker, adapted for [`thriftpy`](https://github.com/eleme/thriftpy)
 
-note: If you wants to use `thriftpy_sync` or `thriftpy_gevent`, make sure the following:
+note: If you want to use `thriftpy_sync` or `thriftpy_gevent`, make sure the following:
 
 * Version of `thriftpy` should be higher than `0.1.10`.
 * `--thrift-protocol-factory` should be set to either `thriftpy.protocol:TCyBinaryProtocolFactory` or `thriftpy.protocol:TBinaryProtocolFactory`
@@ -67,23 +107,25 @@ note: If you wants to use `thriftpy_sync` or `thriftpy_gevent`, make sure the fo
 
 The transport factory to use for handling connections.
 
-Parameter: `--thrift-transport-factory`  
-Config file: `thrift_transport_factory`  
-Default: `thrift.transport.TTransport:TBufferedTransportFactory`
+Parameter: `--thrift-transport-factory`
+Config file: `thrift_transport_factory`
+Default 2.7: `thrift.transport.TTransport:TBufferedTransportFactory`
+Default 3.2+: `thriftpy.transport:TBufferedTransportFactory`
 
 
 ### Protocol factory
 
 The protocol factory to use for parsing requests.
 
-Parameter: `--thrift-protocol-factory`  
-Config file: `thrift_protocol_factory`  
-Default: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`
+Parameter: `--thrift-protocol-factory`
+Config file: `thrift_protocol_factory`
+Default 2.7: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`
+Default 3.2+: `thriftpy.protocol:TBinaryProtocolFactory`
 
 ### Client timeout
 
 Seconds to timeout a client if it is silent after this duration.
 
-Parameter: `--thrift-client-timeout`  
-Config file: `thrift_client_timeout`  
+Parameter: `--thrift-client-timeout`
+Config file: `thrift_client_timeout`
 Default: `None` (Never time out a client)
