@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import errno
 import logging
-
-logger = logging.getLogger(__name__)
 
 try:
     import thrift
@@ -13,6 +12,9 @@ from thrift.transport import TSocket
 from thrift.transport import TTransport
 
 from gunicorn.workers.sync import SyncWorker
+
+
+logger = logging.getLogger(__name__)
 
 
 class SyncThriftWorker(SyncWorker):
@@ -40,7 +42,10 @@ class SyncThriftWorker(SyncWorker):
                     self.app.thrift_app.process(iprot, oprot)
                     self.notify()
             except TTransport.TTransportException:
-                pass
+                if e.args[0] == errno.ECONNRESET:
+                    self.log.debug(e)
+                else:
+                    self.log.exception(e)
         except Exception as e:
             logging.exception(e)
         finally:

@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+
+import errno
+import logging
+
 try:
     import gevent
 except RuntimeError:
@@ -12,15 +16,15 @@ except ImportError:
     raise RuntimeError('`thriftpy_gevent` worker is unavailable because '
                        'thriftpy is not installed')
 
-import logging
-
-logger = logging.getLogger(__name__)
 
 from thriftpy.transport import TSocket
 from thriftpy.transport import TTransportException
 
 from gunicorn.errors import AppImportError
 from gunicorn.workers.ggevent import GeventWorker
+
+
+logger = logging.getLogger(__name__)
 
 
 def check_protocol_and_transport(app):
@@ -67,7 +71,10 @@ class GeventThriftPyWorker(GeventWorker):
             except TTransportException:
                 pass
         except Exception as e:
-            logger.exception(e)
+            if e.args[0] == errno.ECONNRESET:
+                self.log.debug(e)
+            else:
+                self.log.exception(e)
         finally:
             itrans.close()
             otrans.close()
