@@ -1,3 +1,9 @@
 include README.md
 include setup.py
 include *.txt
+recursive-exclude . .*.swp
+recursive-exclude . .*.swo
+recursive-exclude venv *
+recursive-exclude dist *
+recursive-exclude build *
+recursive-exclude *.egg-info *

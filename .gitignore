@@ -52,3 +52,11 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Vim developers
+.*.swp
+.*.swo
+.*.swo
+
+# Mr.developer ignores
+venv
