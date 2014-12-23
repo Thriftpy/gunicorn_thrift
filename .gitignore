@@ -57,3 +57,6 @@ target/
 .*.swp
 .*.swo
 .*.swo
+
+# Mr.developer ignores
+venv
