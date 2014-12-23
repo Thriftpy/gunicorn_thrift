@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import errno
+import socket
 import logging
 
 try:
@@ -42,12 +43,14 @@ class SyncThriftWorker(SyncWorker):
                     self.app.thrift_app.process(iprot, oprot)
                     self.notify()
             except TTransport.TTransportException:
-                if e.args[0] == errno.ECONNRESET:
-                    self.log.debug(e)
-                else:
-                    self.log.exception(e)
+                pass
+        except socket.error as e:
+            if e.args[0] == errno.ECONNRESET:
+                self.log.debug(e)
+            else:
+                self.log.exception(e)
         except Exception as e:
-            logging.exception(e)
+            self.log.exception(e)
         finally:
             itrans.close()
             otrans.close()
