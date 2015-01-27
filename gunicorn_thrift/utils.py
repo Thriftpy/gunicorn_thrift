@@ -33,6 +33,6 @@ def load_obj(import_path):
 
 class ProcessorMixin(object):
     def get_thrift_processor(self):
-        return self.app.thrift_app() if \
+        return self.app.thrift_app.get_processor() if \
             self.app.cfg.thrift_processor_as_factory else \
             self.app.thrift_app
