@@ -29,3 +29,10 @@ def load_obj(import_path):
         raise AppImportError("Failed to find application object: %r" % obj)
 
     return app
+
+
+class ProcessorMixin(object):
+    def get_thrift_processor(self):
+        return self.app.thrift_app() if \
+            self.app.cfg.thrift_processor_as_factory else \
+            self.app.thrift_app

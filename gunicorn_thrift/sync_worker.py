@@ -14,11 +14,12 @@ from thrift.transport import TTransport
 
 from gunicorn.workers.sync import SyncWorker
 
+from .utils import ProcessorMixin
 
 logger = logging.getLogger(__name__)
 
 
-class SyncThriftWorker(SyncWorker):
+class SyncThriftWorker(SyncWorker, ProcessorMixin):
     def get_thrift_transports_and_protos(self, result):
         itrans = self.app.tfactory.getTransport(result)
         otrans = self.app.tfactory.getTransport(result)
@@ -38,9 +39,11 @@ class SyncThriftWorker(SyncWorker):
             (itrans, otrans), (iprot, oprot) = \
                 self.get_thrift_transports_and_protos(result)
 
+            processor = self.get_thrift_processor()
+
             try:
                 while True:
-                    self.app.thrift_app.process(iprot, oprot)
+                    processor.process(iprot, oprot)
                     self.notify()
             except TTransport.TTransportException:
                 pass

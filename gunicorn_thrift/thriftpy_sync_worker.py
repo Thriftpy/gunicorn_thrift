@@ -16,6 +16,7 @@ from thriftpy.transport import TTransportException
 from gunicorn.errors import AppImportError
 from gunicorn.workers.sync import SyncWorker
 
+from .utils import ProcessorMixin
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ def check_protocol_and_transport(app):
             )
 
 
-class SyncThriftPyWorker(SyncWorker):
+class SyncThriftPyWorker(SyncWorker, ProcessorMixin):
     def run(self):
         check_protocol_and_transport(self.app)
         super(SyncThriftPyWorker, self).run()
@@ -58,9 +59,11 @@ class SyncThriftPyWorker(SyncWorker):
             iprot = self.app.pfactory.get_protocol(itrans)
             oprot = self.app.pfactory.get_protocol(otrans)
 
+            processor = self.get_thrift_processor()
+
             try:
                 while True:
-                    self.app.thrift_app.process(iprot, oprot)
+                    processor.process(iprot, oprot)
                     self.notify()
             except TTransportException:
                 pass

@@ -3,7 +3,7 @@
 
 from gunicorn import six
 from gunicorn.config import Setting, validate_string, validate_pos_int,\
-    WorkerClass, validate_callable
+    WorkerClass, validate_callable, validate_bool
 
 from .six import DEFAULT_WORKER, DEFAULT_TRANSPORT, DEFAULT_PROTOCOL
 
@@ -41,6 +41,17 @@ class ThriftClientTimeout(Setting):
     default = None
     desc = """\
         Seconds to timeout a client if client is silent after this duration
+    """
+
+
+class ProcessorAsFactory(Setting):
+    name = "thrift_processor_as_factory"
+    section = "Thrift"
+    cli = ["--thrift-processor-as-factory"]
+    validator = validate_bool
+    default = False
+    desc = """\
+        Treat app as processor factory instead of a single processor.
     """
 
 
