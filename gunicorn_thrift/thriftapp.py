@@ -44,18 +44,19 @@ class ThriftApplication(Application):
         sys.path.insert(0, self.cfg.chdir)
 
     def run(self):
-        if self.cfg.service_register_mod:
-            service_register_mod = utils.load_obj(
-                self.cfg.service_register_mod)
-            service_register_mod.servier_register_listener(
-                self, self.cfg.service_register_conf)
+        if self.cfg.service_register_cls:
+            service_register_cls = utils.load_obj(
+                self.cfg.service_register_cls)
+            self.service_watcher = service_register_cls(
+                self.cfg.service_register_conf)
+            # generate the instances to register
             instances = []
             for i in self.cfg.address:
                 port = i[1]
                 instances.append({'port': {"main": port},
                                   'meta': None,
                                   'state': 'up'})
-            service_register_mod.register_to_huskar(self, instances)
+            self.service_watcher.register_instances(instances)
         super(ThriftApplication, self).run()
 
 

@@ -94,20 +94,20 @@ class ClientConnected(Setting):
 
 class ServiceRegisterConf(Setting):
     name = "service_register_conf"
-    section = "Service Register"
+    section = "Service Register Conf"
     default = {}
     validator = validate_dict
     desc = """\
-        Config used to connect to huskar, it should contain: hosts, username,
-        password, project, module, team, cluster, service_name
+        Config used to connect to service register watcher
         """
 
-class ServiceRegisterProcess(Setting):
-    name = "service_register_mod"
-    section = "Thrift"
-    cli = ["--service-register-mod"]
+
+class ServiceRegisterClass(Setting):
+    name = "service_register_cls"
+    section = "Service Register Class"
+    cli = ["--service-register-cls"]
     validator = validate_string
     default = ''
     desc = """\
-        The module used for register service to huskar
+        The class used for register service
     """
