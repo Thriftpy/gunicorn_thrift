@@ -12,7 +12,6 @@ from . import config
 from . import utils
 from .six import AVAILABLE_WORKERS
 
-
 # register thrift workers
 
 gunicorn.workers.SUPPORTED_WORKERS.update(AVAILABLE_WORKERS)
@@ -43,6 +42,22 @@ class ThriftApplication(Application):
     def chdir(self):
         os.chdir(self.cfg.chdir)
         sys.path.insert(0, self.cfg.chdir)
+
+    def run(self):
+        if self.cfg.service_register_cls:
+            service_register_cls = utils.load_obj(
+                self.cfg.service_register_cls)
+            self.service_watcher = service_register_cls(
+                self.cfg.service_register_conf)
+            # generate the instances to register
+            instances = []
+            for i in self.cfg.address:
+                port = i[1]
+                instances.append({'port': {"main": port},
+                                  'meta': None,
+                                  'state': 'up'})
+            self.service_watcher.register_instances(instances)
+        super(ThriftApplication, self).run()
 
 
 def run():

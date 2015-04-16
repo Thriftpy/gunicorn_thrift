@@ -3,7 +3,7 @@
 
 from gunicorn import six
 from gunicorn.config import Setting, validate_string, validate_pos_int,\
-    WorkerClass, validate_callable, validate_bool
+    WorkerClass, validate_callable, validate_bool, validate_dict
 
 from .six import DEFAULT_WORKER, DEFAULT_TRANSPORT, DEFAULT_PROTOCOL
 
@@ -90,3 +90,24 @@ class ClientConnected(Setting):
         The callable needs to accept two instance variable for the worker and
         the connected client address.
         """
+
+
+class ServiceRegisterConf(Setting):
+    name = "service_register_conf"
+    section = "Service Register Conf"
+    default = {}
+    validator = validate_dict
+    desc = """\
+        Config used to connect to service register watcher
+        """
+
+
+class ServiceRegisterClass(Setting):
+    name = "service_register_cls"
+    section = "Service Register Class"
+    cli = ["--service-register-cls"]
+    validator = validate_string
+    default = ''
+    desc = """\
+        The class used for register service
+    """
