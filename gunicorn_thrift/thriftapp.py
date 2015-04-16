@@ -48,7 +48,7 @@ class ThriftApplication(Application):
             service_register_cls = utils.load_obj(
                 self.cfg.service_register_cls)
             self.service_watcher = service_register_cls(
-                self.cfg.service_register_conf)
+                self.cfg.service_register_conf, self)
             # generate the instances to register
             instances = []
             for i in self.cfg.address:
