@@ -29,6 +29,7 @@ class SyncThriftWorker(SyncWorker, ProcessorMixin):
         return (itrans, otrans), (iprot, oprot)
 
     def handle(self, listener, client, addr):
+        self.cfg.on_connected(self, addr)
         if self.app.cfg.thrift_client_timeout is not None:
             client.settimeout(self.app.cfg.thrift_client_timeout)
 
