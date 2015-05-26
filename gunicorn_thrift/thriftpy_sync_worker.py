@@ -7,7 +7,7 @@ import logging
 try:
     import thriftpy
 except ImportError:
-    raise RuntimeError('`thriftpy_gevent` worker is unavailable because '
+    raise RuntimeError('`thriftpy_sync` worker is unavailable because '
                        'thriftpy is not installed')
 
 from thriftpy.transport import TSocket
