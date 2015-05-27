@@ -5,7 +5,7 @@ import sys
 PY_VERSION = sys.version_info[:3]
 
 
-if PY_VERSION <= (2, 7, 9):
+if PY_VERSION <= (2, 8, 0):
     DEFAULT_WORKER = "thrift_sync"
     DEFAULT_TRANSPORT = "thrift.transport.TTransport:TBufferedTransportFactory"
     DEFAULT_PROTOCOL = \
