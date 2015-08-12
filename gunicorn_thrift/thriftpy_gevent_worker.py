@@ -77,11 +77,13 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
                 pass
         except socket.error as e:
             if e.args[0] == errno.ECONNRESET:
-                self.log.debug(e)
+                self.log.debug('%r: %r', addr, e)
+            elif e.args[0] == errno.EPIPE:
+                self.log.warn('%r: %r', addr, e)
             else:
-                self.log.exception(e)
+                self.log.exception('%r: %r', addr, e)
         except Exception as e:
-            self.log.exception(e)
+            self.log.exception('%r: %r', addr, e)
         finally:
             itrans.close()
             otrans.close()
