@@ -79,7 +79,7 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
             if e.args[0] == errno.ECONNRESET:
                 self.log.debug('%r: %r', addr, e)
             elif e.args[0] == errno.EPIPE:
-                self.log.warn('%r: %r', addr, e)
+                self.log.warning('%r: %r', addr, e)
             else:
                 self.log.exception('%r: %r', addr, e)
         except Exception as e:
