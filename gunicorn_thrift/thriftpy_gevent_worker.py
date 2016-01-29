@@ -87,6 +87,7 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
         finally:
             itrans.close()
             otrans.close()
+            self.cfg.post_connect_closed(self)
 
     def handle_exit(self, sig, frame):
         ret = super(GeventThriftPyWorker, self).handle_exit(sig, frame)

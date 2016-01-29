@@ -92,6 +92,23 @@ class ClientConnected(Setting):
         """
 
 
+class ClientConnectClosed(Setting):
+    name = "post_connect_closed"
+    section = "Server Hooks"
+    validator = validate_callable(1)
+    type = six.callable
+
+    def post_connect_closed(worker):
+        pass
+
+    default = staticmethod(post_connect_closed)
+    desc = """\
+        Called just after a connection is closed.
+
+        The callable needs to accept one instance variable for the worker.
+        """
+
+
 class ServiceRegisterConf(Setting):
     name = "service_register_conf"
     section = "Service Register Conf"
