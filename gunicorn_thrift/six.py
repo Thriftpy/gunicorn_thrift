@@ -22,4 +22,5 @@ else:
     DEFAULT_PROTOCOL = "thriftpy.protocol:TBinaryProtocolFactory"
     AVAILABLE_WORKERS = {
         'thriftpy_sync': 'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
+        'thriftpy_gevent': 'gunicorn_thrift.thriftpy_gevent_worker.GeventThriftPyWorker',
         }
