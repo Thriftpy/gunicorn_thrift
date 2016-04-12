@@ -99,17 +99,21 @@ There are 4 types of workers avaiable.
 note: If you want to use `thriftpy_sync` or `thriftpy_gevent`, make sure the following:
 
 * Version of `thriftpy` should be higher than `0.1.10`.
-* `--thrift-protocol-factory` should be set to either `thriftpy.protocol:TCyBinaryProtocolFactory` or `thriftpy.protocol:TBinaryProtocolFactory`
-* `--thrift-transport-factory` should be set to either `thriftpy.transport:TCyBufferedTransportFactory` or `thriftpy.transport:TBufferedTransportFactory`
+* `--thrift-protocol-factory` should be set to either:  
+    1. `thriftpy.protocol:TCyBinaryProtocolFactory` or
+    1. `thriftpy.protocol:TBinaryProtocolFactory`
+* `--thrift-transport-factory` should be set to either:  
+    1. `thriftpy.transport:TCyBufferedTransportFactory` or
+    1. `thriftpy.transport:TBufferedTransportFactory`
 
 
 ### Transport factory
 
 The transport factory to use for handling connections.
 
-Parameter: `--thrift-transport-factory`
-Config file: `thrift_transport_factory`
-Default 2.7: `thrift.transport.TTransport:TBufferedTransportFactory`
+Parameter: `--thrift-transport-factory`  
+Config file: `thrift_transport_factory`  
+Default 2.7: `thrift.transport.TTransport:TBufferedTransportFactory`  
 Default 3.2+: `thriftpy.transport:TBufferedTransportFactory`
 
 
@@ -117,15 +121,15 @@ Default 3.2+: `thriftpy.transport:TBufferedTransportFactory`
 
 The protocol factory to use for parsing requests.
 
-Parameter: `--thrift-protocol-factory`
-Config file: `thrift_protocol_factory`
-Default 2.7: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`
+Parameter: `--thrift-protocol-factory`  
+Config file: `thrift_protocol_factory`  
+Default 2.7: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`  
 Default 3.2+: `thriftpy.protocol:TBinaryProtocolFactory`
 
 ### Client timeout
 
 Seconds to timeout a client if it is silent after this duration.
 
-Parameter: `--thrift-client-timeout`
-Config file: `thrift_client_timeout`
+Parameter: `--thrift-client-timeout`  
+Config file: `thrift_client_timeout`  
 Default: `None` (Never time out a client)
