@@ -128,3 +128,27 @@ class ServiceRegisterClass(Setting):
     desc = """\
         The class used for register service
     """
+
+class ThriftOnExit(Setting):
+    name = "on_exit"
+    section = "Server Hooks"
+    validator = validate_callable(1)
+
+    def on_exit(server):
+        service_watcher = server.app.service_watcher
+        if service_watcher:
+            instances = []
+            for i in server.cfg.address:
+                port = i[1]
+                instances.append({'port': {"main": port},
+                                  'meta': None,
+                                  'state': 'up'})
+            service_watcher.remove_instance(instances)
+
+    default = staticmethod(on_exit)
+    desc = """\
+        Override the original OnExit.
+        Rewrite the on_exit method to remove instances if the app has registered.
+
+    """
+
