@@ -1,8 +1,8 @@
 language: python
 pcache: apt
 install:
+  - if [ "$TRAVIS_PYTHON_VERSION" == "3.2" ]; then travis_retry pip install virtualenv<14.0.0 coverage==3.7.1; fi
   - pip install tox
-  - if [ "$TRAVIS_PYTHON_VERSION" == "3.2" ]; then travis_retry pip install coverage==3.7.1; fi
 env:
   - TOXENV=py27
   - TOXENV=py32
