@@ -1,7 +1,7 @@
 language: python
 pcache: apt
 install:
-  - if [ "$TOXENV" == "py32" ]; then travis_retry pip install virtualenv<14.0.0 coverage==3.7.1; fi
+  - if [ "$TOXENV" == "py32" ]; then travis_retry pip install "virtualenv<14.0.0" "coverage==3.7.1"; fi
   - pip install tox
 env:
   - TOXENV=py27
