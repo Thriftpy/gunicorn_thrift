@@ -89,7 +89,7 @@ Config file: `worker_class`
 Default 2.7: `thrift_sync`
 Default 3.2+: `thriftpy_sync`
 
-There are 4 types of workers avaiable.
+There are 4 types of workers available.
 
 * `thrift_sync`: sync worker.
 * `thrift_gevent`: gevent worker.
