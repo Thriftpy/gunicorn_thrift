@@ -20,6 +20,8 @@ except ImportError:
 
 from thriftpy.transport import TSocket
 from thriftpy.transport import TTransportException
+from thriftpy.protocol.exc import TProtocolException
+from thriftpy.protocol.cybin import ProtocolError
 
 from gunicorn.errors import AppImportError
 from gunicorn.workers.ggevent import GeventWorker
@@ -75,6 +77,10 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
                     processor.process(iprot, oprot)
             except TTransportException:
                 pass
+        except (TProtocolException, ProtocolError) as err:
+            self.log.warning(
+                "Protocol error, is client(%s) correct? %s", addr, err
+                )
         except socket.error as e:
             if e.args[0] == errno.ECONNRESET:
                 self.log.debug('%r: %r', addr, e)
