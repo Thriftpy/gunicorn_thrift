@@ -1,4 +1,4 @@
-setproctitle==1.1.8
+setproctitle==1.1.10
 gevent>=1.0.1,<1.1
 gunicorn==19.3.0
 wsgiref==0.1.2
