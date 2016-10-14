@@ -81,6 +81,8 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
             self.log.warning(
                 "Protocol error, is client(%s) correct? %s", addr, err
                 )
+        except socket.timeout:
+            self.log.warning('Client timeout: %r', addr)
         except socket.error as e:
             if e.args[0] == errno.ECONNRESET:
                 self.log.debug('%r: %r', addr, e)
