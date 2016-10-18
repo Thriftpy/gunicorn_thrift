@@ -33,7 +33,7 @@ if PY_VERSION < (2, 7, 0):
 elif PY_VERSION >= (3, 0, 0) and PY_VERSION < (3, 2, 0):
     raise RuntimeError('Python 3 < 3.2 is unsupported')
 
-if PY_VERSION <= (2, 7, 9):
+if PY_VERSION[0] == 2:
     fname = os.path.join(os.path.dirname(__file__), 'requirements_py27.txt')
 else:
     fname = os.path.join(os.path.dirname(__file__), 'requirements_py3x.txt')
