@@ -64,6 +64,10 @@ class SyncThriftPyWorker(SyncWorker, ProcessorMixin):
 
             try:
                 while True:
+                    self.nr += 1
+                    if self.alive and self.nr >= self.max_requests:
+                        self.log.info("Autorestarting worker after current process.")
+                        self.alive = False                    
                     processor.process(iprot, oprot)
                     self.notify()
             except TTransportException:
