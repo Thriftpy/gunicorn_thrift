@@ -55,6 +55,7 @@ class TestThriftSyncWorker:
         transport.close()
 
         # Try again for new worker
+        time.sleep(1)
         transport = TSocket.TSocket('localhost', 8004)
         transport = TTransport.TBufferedTransport(transport)
         protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
