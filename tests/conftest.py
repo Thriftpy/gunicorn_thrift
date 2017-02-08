@@ -159,7 +159,7 @@ def pingpong_thriftpy_server_sync(request):
          "tests/gunicorn_config.py", "-k", "thriftpy_sync",
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
-         "--thrift-transport-factor",
+         "--thrift-transport-factory",
          "thriftpy.transport:TBufferedTransportFactory",
          "--log-file", "-"],
         )
@@ -180,7 +180,7 @@ def timeout_pingpong_thriftpy_server_sync(request):
          "tests/gunicorn_timeout_config.py", "-k", "thriftpy_sync",
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
-         "--thrift-transport-factor",
+         "--thrift-transport-factory",
          "thriftpy.transport:TBufferedTransportFactory",
          "--log-file", "-"],
         )
@@ -201,7 +201,7 @@ def volatile_pingpong_thriftpy_server_sync(request):
          "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
          "thriftpy_sync", "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
-         "--thrift-transport-factor",
+         "--thrift-transport-factory",
          "thriftpy.transport:TBufferedTransportFactory"
          "--log-file", "-"],
         )
@@ -225,7 +225,7 @@ def pingpong_thriftpy_server_gevent(request, make_test_thrift):
          "tests/gunicorn_config.py", "-k", "thriftpy_gevent",
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
-         "--thrift-transport-factor",
+         "--thrift-transport-factory",
          "thriftpy.transport:TBufferedTransportFactory",
          "--log-file", "-"],
         )
@@ -246,7 +246,7 @@ def timeout_pingpong_thriftpy_server_gevent(request, make_test_thrift):
          "tests/gunicorn_timeout_config.py", "-k", "thriftpy_gevent",
          "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
-         "--thrift-transport-factor",
+         "--thrift-transport-factory",
          "thriftpy.transport:TBufferedTransportFactory",
          "--log-file", "-"],
         )
@@ -267,7 +267,7 @@ def volatile_pingpong_thriftpy_server_gevent(request, make_test_thrift):
          "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
          "thriftpy_gevent", "--thrift-protocol-factory",
          "thriftpy.protocol:TBinaryProtocolFactory",
-         "--thrift-transport-factor",
+         "--thrift-transport-factory",
          "thriftpy.transport:TBufferedTransportFactory",
          "--log-file", "-"],
         )
