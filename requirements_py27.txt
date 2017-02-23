@@ -3,4 +3,4 @@ gevent>=1.0.1,<1.2
 gunicorn>=19.3.0,<19.4.0
 wsgiref==0.1.2
 thrift>=0.9.0
-thriftpy>=0.1.10
+thriftpy>=0.3.3.1
