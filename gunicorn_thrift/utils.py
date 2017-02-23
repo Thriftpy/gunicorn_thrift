@@ -4,6 +4,20 @@ import os
 import importlib
 from gunicorn.errors import AppImportError
 
+import socket
+import struct
+import fcntl
+
+
+def get_IPv4(ethname):
+    s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    ip = socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0X8915,
+        struct.pack('256s', ethname[:15])
+        )[20:24])
+    return ip
+
 
 def load_obj(import_path):
     parts = import_path.split(":", 1)
