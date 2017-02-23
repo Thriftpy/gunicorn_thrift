@@ -44,11 +44,11 @@ class ThriftApplication(Application):
         sys.path.insert(0, self.cfg.chdir)
 
     def run(self):
-        if self.cfg.service_register_cls:
-            service_register_cls = utils.load_obj(
-                self.cfg.service_register_cls)
-            self.service_watcher = service_register_cls(
-                self.cfg.service_register_conf, self)
+        if self.cfg.service_watcher_cls:
+            service_watcher_cls = utils.load_obj(
+                self.cfg.service_watcher_cls)
+            self.service_watcher = service_watcher_cls(
+                self.cfg.service_watcher_conf, self)
             # generate the instances to register
             instances = []
             for i in self.cfg.address:

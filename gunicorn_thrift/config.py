@@ -110,8 +110,8 @@ class ClientConnectClosed(Setting):
 
 
 class ServiceRegisterConf(Setting):
-    name = "service_register_conf"
-    section = "Service Register Conf"
+    name = "service_watcher_conf"
+    section = "Service Watcher Conf"
     default = {}
     validator = validate_dict
     desc = """\
@@ -119,10 +119,10 @@ class ServiceRegisterConf(Setting):
         """
 
 
-class ServiceRegisterClass(Setting):
-    name = "service_register_cls"
-    section = "Service Register Class"
-    cli = ["--service-register-cls"]
+class ServiceWatcherClass(Setting):
+    name = "service_watcher_cls"
+    section = "Service Watcher Class"
+    cli = ["--service-watcher-cls"]
     validator = validate_string
     default = ''
     desc = """\
