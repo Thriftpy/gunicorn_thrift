@@ -2,6 +2,7 @@ gunicorn_thrift
 ===============
 
 [![Build Status](https://travis-ci.org/eleme/gunicorn_thrift.svg?branch=master)](https://travis-ci.org/eleme/gunicorn_thrift)
+[![Coverage Status](https://coveralls.io/repos/github/eleme/gunicorn_thrift/badge.svg?branch=master)](https://coveralls.io/github/eleme/gunicorn_thrift?branch=master)
 
 Thrift app and worker for gunicorn!
 
