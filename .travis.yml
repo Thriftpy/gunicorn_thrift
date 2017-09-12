@@ -1,14 +1,9 @@
 language: python
 pcache: apt
-dist: Xenial
+dist: xenial
 install:
-  - pip install tox
-
-dependencies:
-  override:
-    - pip install tox tox-pyenv
-    - pyenv local 2.7.13 3.3.6 3.4.3 3.5.3
-
+  - pip install tox tox-pyenv
+  - pyenv local 2.7.13 3.3.6 3.4.3 3.5.3
 env:
   - TOXENV=py27
   - TOXENV=py33
