@@ -2,7 +2,7 @@ language: python
 pcache: apt
 dist: Xenial
 install:
- - pip install tox
+  - pip install tox
 
 dependencies:
   override:
