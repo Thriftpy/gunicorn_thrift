@@ -128,3 +128,14 @@ class ServiceRegisterClass(Setting):
     desc = """\
         The class used for register service
     """
+
+
+class GeventCheckInterval(Setting):
+    name = "gevent_check_interval"
+    section = "Thrift"
+    cli = ["--gevent-check-interval"]
+    validator = validate_pos_int
+    default = 10
+    desc = """\
+        The inteval in which to check if gevent ioloop is blocked.
+    """
