@@ -42,7 +42,7 @@ with open(fname) as f:
     REQUIREMENTS = list(map(lambda l: l.strip(), f.readlines()))
 
 # read dev requirements
-if PY_VERSION <= (2, 7, 9):
+if PY_VERSION[0] < 3:
     fname = os.path.join(os.path.dirname(__file__),
                          'test_requirements_py27.txt')
 else:
