@@ -129,8 +129,6 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
                 raise
 
     def _check_greenlet_blocking(self):
-        if not self.app.cfg.gevent_check_interval:
-            return
         # If there have been no greenlet switches since we last checked,
         # grab the stack trace and log an error.  The active greenlet's frame
         # is not available from the greenlet object itself, we have to look
