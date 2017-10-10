@@ -76,8 +76,6 @@ def check_protocol_and_transport(app):
 
 class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
     def init_process(self):
-        needs_monitoring_thread = False
-
         # Set up a greenlet tracing hook to monitor for event-loop blockage,
         # but only if monitoring is both possible and required.
         if hasattr(greenlet, "settrace") and \
@@ -90,13 +88,10 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
             self._active_greenlet = None
             self._greenlet_switch_counter = 0
             greenlet.settrace(self._greenlet_switch_tracer)
-            needs_monitoring_thread = True
             self._main_thread_id = _real_get_ident()
-
-        # Create a real thread to monitor out execution.
-        # Since this will be a long-running daemon thread, it's OK to
-        # fire-and-forget using the low-level start_new_thread function.
-        if needs_monitoring_thread:
+            # Create a real thread to monitor out execution.
+            # Since this will be a long-running daemon thread, it's OK to
+            # fire-and-forget using the low-level start_new_thread function.
             _real_start_new_thread(self._process_monitoring_thread, ())
 
         return super(GeventThriftPyWorker, self).init_process()
