@@ -11,6 +11,7 @@ import traceback
 
 try:
     import gevent
+    import gevent.monkey
     import greenlet
 except RuntimeError:
     raise RuntimeError('`thriftpy_gevent` worker is unavailable because '
@@ -35,12 +36,22 @@ from .utils import ProcessorMixin
 
 logger = logging.getLogger(__name__)
 
+
 # Take references to un-monkey-patched versions of stuff we need.
 # Monkey-patching will have already been done by the time we come to
 # use these functions at runtime.
-_real_sleep = time.sleep
-_real_start_new_thread = thread.start_new_thread
-_real_get_ident = thread.get_ident
+# And there's a change thread is already patched when importing this module,
+# so we check first if it's already patched.
+def __get_real_function(module, name):
+    patched_origin = gevent.monkey.saved.get(module.__name__, {}).get(name)
+    if not patched_origin:
+        patched_origin = getattr(module, name)
+    return patched_origin
+
+
+_real_sleep = __get_real_function(time, 'sleep')
+_real_start_new_thread = __get_real_function(thread, 'start_new_thread')
+_real_get_ident = __get_real_function(thread, 'get_ident')
 
 
 def check_protocol_and_transport(app):
