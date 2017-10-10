@@ -80,6 +80,7 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
             self._greenlet_switch_counter = 0
             greenlet.settrace(self._greenlet_switch_tracer)
             needs_monitoring_thread = True
+            self._main_thread_id = _real_get_ident()
 
         # Create a real thread to monitor out execution.
         # Since this will be a long-running daemon thread, it's OK to
@@ -125,12 +126,15 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
         if not self.app.cfg.gevent_check_interval:
             return
         # If there have been no greenlet switches since we last checked,
-        # grab the stack trace and log an error.
+        # grab the stack trace and log an error.  The active greenlet's frame
+        # is not available from the greenlet object itself, we have to look
+        # up the current frame of the main thread for the traceback.
         if self._greenlet_switch_counter == 0:
             active_greenlet = self._active_greenlet
             # The hub gets a free pass, since it blocks waiting for IO.
             if active_greenlet not in (None, self._active_hub):
-                stack = traceback.format_stack(active_greenlet.gr_frame)
+                frame = sys._current_frames()[self._main_thread_id]
+                stack = traceback.format_stack(frame)
                 err_log = ["Greenlet appears to be blocked\n"] + stack
                 logger.error("".join(err_log))
         # Reset the count to zero.
