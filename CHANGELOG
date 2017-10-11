@@ -1,0 +1,7 @@
+Changelog
+==========
+
+0.2.19
+------
+
+* Add option to detect gevent ioloop blockage. #43
