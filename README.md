@@ -134,3 +134,15 @@ Seconds to timeout a client if it is silent after this duration.
 Parameter: `--thrift-client-timeout`  
 Config file: `thrift_client_timeout`  
 Default: `None` (Never time out a client)
+
+### Gevent check interval
+
+This config will run a seperate thread to detect gevent ioloop block every
+specified seconds.
+
+Parameter: `--gevent-check-interval`  
+Config file: `gevent_check_interval`  
+Default: 0  
+
+Note: DONOT USE this if not running gevent worker.
+
