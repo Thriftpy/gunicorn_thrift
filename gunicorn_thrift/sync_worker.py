@@ -48,6 +48,8 @@ class SyncThriftWorker(SyncWorker, ProcessorMixin):
                     self.notify()
             except TTransport.TTransportException:
                 pass
+        except socket.timeout:
+            self.log.warning('Client timeout: %r', addr)
         except socket.error as e:
             if e.args[0] == errno.ECONNRESET:
                 self.log.debug(e)
