@@ -28,6 +28,7 @@ from thriftpy.transport import TSocket
 from thriftpy.transport import TTransportException
 from thriftpy.protocol.exc import TProtocolException
 from thriftpy.protocol.cybin import ProtocolError
+from thriftpy.thrift import TDecodeException
 
 from gunicorn.errors import AppImportError
 from gunicorn.workers.ggevent import GeventWorker
@@ -175,6 +176,9 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
             self.log.warning(
                 "Protocol error, is client(%s) correct? %s", addr, err
                 )
+        except TDecodeException as err:
+            self.log.exception('%r: %r', addr, err)
+            self.cfg.on_tdecode_exception(err)
         except socket.timeout:
             self.log.warning('Client timeout: %r', addr)
         except socket.error as e:

@@ -12,6 +12,7 @@ except ImportError:
 
 from thriftpy.transport import TSocket
 from thriftpy.transport import TTransportException
+from thriftpy.thrift import TDecodeException
 
 from gunicorn.errors import AppImportError
 from gunicorn.workers.sync import SyncWorker
@@ -68,6 +69,9 @@ class SyncThriftPyWorker(SyncWorker, ProcessorMixin):
                     self.notify()
             except TTransportException:
                 pass
+        except TDecodeException as err:
+            self.log.exception('%r: %r', addr, err)
+            self.cfg.on_tdecode_exception(err)
         except socket.timeout:
             self.log.warning('Client timeout: %r', addr)
         except socket.error as e:

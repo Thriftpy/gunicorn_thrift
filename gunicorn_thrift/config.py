@@ -92,6 +92,23 @@ class ClientConnected(Setting):
         """
 
 
+class TDecodeExceptionRaised(Setting):
+    name = "on_tdecode_exception"
+    section = "Server Hooks"
+    validator = validate_callable(1)
+    type = six.callable
+
+    def on_tdecode_exception(err):
+        pass
+
+    default = staticmethod(on_tdecode_exception)
+    desc = """\
+        Called if tdecode exception is raised
+
+        The callable needs to accept one variable for the exception raised.
+        """
+
+
 class ClientConnectClosed(Setting):
     name = "post_connect_closed"
     section = "Server Hooks"
