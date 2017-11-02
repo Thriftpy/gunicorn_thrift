@@ -15,8 +15,8 @@ Thrift app and worker for gunicorn! Hence, a multi-process python thrift server!
 ## Supported Platforms
 
 * Python 2.7, all worker classes
-* Python 3.2+, `thriftpy_sync` worker class (neither gevent nor code generated
-  using the Thrift toolkit are supported on Python 3)
+* Python 3.2+, `thriftpy_sync` and `thriftpy_gevent` worker classes (code generated
+  using the Thrift toolkit is not supported on Python 3)
 
 ## Examples
 
@@ -100,10 +100,10 @@ There are 4 types of workers available.
 note: If you want to use `thriftpy_sync` or `thriftpy_gevent`, make sure the following:
 
 * Version of `thriftpy` should be higher than `0.1.10`.
-* `--thrift-protocol-factory` should be set to either:  
+* `--thrift-protocol-factory` should be set to either:
     1. `thriftpy.protocol:TCyBinaryProtocolFactory` or
     1. `thriftpy.protocol:TBinaryProtocolFactory`
-* `--thrift-transport-factory` should be set to either:  
+* `--thrift-transport-factory` should be set to either:
     1. `thriftpy.transport:TCyBufferedTransportFactory` or
     1. `thriftpy.transport:TBufferedTransportFactory`
 
@@ -112,9 +112,9 @@ note: If you want to use `thriftpy_sync` or `thriftpy_gevent`, make sure the fol
 
 The transport factory to use for handling connections.
 
-Parameter: `--thrift-transport-factory`  
-Config file: `thrift_transport_factory`  
-Default 2.7: `thrift.transport.TTransport:TBufferedTransportFactory`  
+Parameter: `--thrift-transport-factory`
+Config file: `thrift_transport_factory`
+Default 2.7: `thrift.transport.TTransport:TBufferedTransportFactory`
 Default 3.2+: `thriftpy.transport:TBufferedTransportFactory`
 
 
@@ -122,17 +122,17 @@ Default 3.2+: `thriftpy.transport:TBufferedTransportFactory`
 
 The protocol factory to use for parsing requests.
 
-Parameter: `--thrift-protocol-factory`  
-Config file: `thrift_protocol_factory`  
-Default 2.7: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`  
+Parameter: `--thrift-protocol-factory`
+Config file: `thrift_protocol_factory`
+Default 2.7: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`
 Default 3.2+: `thriftpy.protocol:TBinaryProtocolFactory`
 
 ### Client timeout
 
 Seconds to timeout a client if it is silent after this duration.
 
-Parameter: `--thrift-client-timeout`  
-Config file: `thrift_client_timeout`  
+Parameter: `--thrift-client-timeout`
+Config file: `thrift_client_timeout`
 Default: `None` (Never time out a client)
 
 ### Gevent check interval
@@ -140,9 +140,9 @@ Default: `None` (Never time out a client)
 This config will run a seperate thread to detect gevent ioloop block every
 specified seconds.
 
-Parameter: `--gevent-check-interval`  
-Config file: `gevent_check_interval`  
-Default: 0  
+Parameter: `--gevent-check-interval`
+Config file: `gevent_check_interval`
+Default: 0
 
 Note: DONOT USE this if not running gevent worker.
 

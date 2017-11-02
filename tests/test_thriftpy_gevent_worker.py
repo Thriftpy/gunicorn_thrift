@@ -9,10 +9,8 @@ import pytest
 from thriftpy.transport import TTransportException
 
 from . import AboutToShutDownException, make_client
-from .six import requires_py27
 
 
-@requires_py27
 class TestThriftpyGeventWorker:
     def test_connectivity(self, PingServiceThriftpy,
                           pingpong_thriftpy_server_gevent):

@@ -1,2 +1,4 @@
 pytest
 pytest-cov
+gevent==1.2.2
+thrift==0.9.3
