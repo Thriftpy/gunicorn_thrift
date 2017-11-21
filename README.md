@@ -15,8 +15,8 @@ Thrift app and worker for gunicorn! Hence, a multi-process python thrift server!
 ## Supported Platforms
 
 * Python 2.7, all worker classes
-* Python 3.2+, `thriftpy_sync` worker class (neither gevent nor code generated
-  using the Thrift toolkit are supported on Python 3)
+* Python 3.2+, `thriftpy_sync` and `thriftpy_gevent` worker classes (code generated
+  using the Thrift toolkit is not supported on Python 3)
 
 ## Examples
 
