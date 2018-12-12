@@ -6,7 +6,7 @@ import signal
 import time
 
 import pytest
-from thriftpy.transport import TTransportException
+from thriftpy2.transport import TTransportException
 
 from . import AboutToShutDownException, make_client
 

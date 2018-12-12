@@ -3,12 +3,12 @@
 
 import os
 
-import thriftpy
-from thriftpy.thrift import TProcessor
+import thriftpy2
+from thriftpy2.thrift import TProcessor
 
 from . import AboutToShutDownException
 
-pingpong_thrift = thriftpy.load(
+pingpong_thrift = thriftpy2.load(
     os.path.join(
         os.path.dirname(__file__),
         "pingpong.thrift"

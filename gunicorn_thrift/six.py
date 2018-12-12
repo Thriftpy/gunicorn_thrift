@@ -18,8 +18,8 @@ if PY_VERSION <= (2, 8, 0):
         }
 else:
     DEFAULT_WORKER = "thriftpy_sync"
-    DEFAULT_TRANSPORT = "thriftpy.transport:TBufferedTransportFactory"
-    DEFAULT_PROTOCOL = "thriftpy.protocol:TBinaryProtocolFactory"
+    DEFAULT_TRANSPORT = "thriftpy2.transport:TBufferedTransportFactory"
+    DEFAULT_PROTOCOL = "thriftpy2.protocol:TBinaryProtocolFactory"
     AVAILABLE_WORKERS = {
         'thriftpy_sync': 'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
         'thriftpy_gevent': 'gunicorn_thrift.thriftpy_gevent_worker.GeventThriftPyWorker',

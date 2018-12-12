@@ -5,14 +5,14 @@ import socket
 import logging
 
 try:
-    import thriftpy
+    import thriftpy2
 except ImportError:
     raise RuntimeError('`thriftpy_sync` worker is unavailable because '
-                       'thriftpy is not installed')
+                       'thriftpy2 is not installed')
 
-from thriftpy.transport import TSocket
-from thriftpy.transport import TTransportException
-from thriftpy.thrift import TDecodeException
+from thriftpy2.transport import TSocket
+from thriftpy2.transport import TTransportException
+from thriftpy2.thrift import TDecodeException
 
 from gunicorn.errors import AppImportError
 from gunicorn.workers.sync import SyncWorker
@@ -25,20 +25,20 @@ logger = logging.getLogger(__name__)
 def check_protocol_and_transport(app):
     if not app.cfg.thrift_protocol_factory.startswith('thriftpy'):
         raise AppImportError(
-            'Thriftpy worker can only use protocol from thriftpy,'
+            'Thriftpy worker can only use protocol from thriftpy2,'
             'specify `thrift_protocol_factory` as one of the '
             'following:'
-            '`thriftpy.protocol:TCyBinaryProtocolFactory`, '
-            '`thriftpy.protocol:TBinaryProtocolFactory`'
+            '`thriftpy2.protocol:TCyBinaryProtocolFactory`, '
+            '`thriftpy2.protocol:TBinaryProtocolFactory`'
             )
 
     if not app.cfg.thrift_transport_factory.startswith('thriftpy'):
         raise AppImportError(
-            'Thriftpy worker can only use transport from thriftpy,'
+            'Thriftpy worker can only use transport from thriftpy2,'
             'specify `thrift_transport_factory` as one of the '
             'following:'
-            '`thriftpy.transport:TCyBufferedTransportFactory`, '
-            '`thriftpy.transport:TBufferedTransportFactory`'
+            '`thriftpy2.transport:TCyBufferedTransportFactory`, '
+            '`thriftpy2.transport:TBufferedTransportFactory`'
             )
 
 

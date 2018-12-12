@@ -23,17 +23,17 @@ except RuntimeError:
                        'gevent is not installed')
 
 try:
-    import thriftpy
+    import thriftpy2
 except ImportError:
     raise RuntimeError('`thriftpy_gevent` worker is unavailable because '
-                       'thriftpy is not installed')
+                       'thriftpy2 is not installed')
 
 
-from thriftpy.transport import TSocket
-from thriftpy.transport import TTransportException
-from thriftpy.protocol.exc import TProtocolException
-from thriftpy.protocol.cybin import ProtocolError
-from thriftpy.thrift import TDecodeException
+from thriftpy2.transport import TSocket
+from thriftpy2.transport import TTransportException
+from thriftpy2.protocol.exc import TProtocolException
+from thriftpy2.protocol.cybin import ProtocolError
+from thriftpy2.thrift import TDecodeException
 
 from gunicorn.errors import AppImportError
 from gunicorn.workers.ggevent import GeventWorker
@@ -66,8 +66,8 @@ def check_protocol_and_transport(app):
             'Thriftpy worker can only use protocol from thriftpy,'
             'specify `thrift_protocol_factory` as one of the '
             'following:'
-            '`thriftpy.protocol:TCyBinaryProtocolFactory`, '
-            '`thriftpy.protocol:TBinaryProtocolFactory`'
+            '`thriftpy2.protocol:TCyBinaryProtocolFactory`, '
+            '`thriftpy2.protocol:TBinaryProtocolFactory`'
             )
 
     if not app.cfg.thrift_transport_factory.startswith('thriftpy'):
@@ -75,8 +75,8 @@ def check_protocol_and_transport(app):
             'Thriftpy worker can only use transport from thriftpy,'
             'specify `thrift_transport_factory` as one of the '
             'following:'
-            '`thriftpy.transport:TCyBufferedTransportFactory`, '
-            '`thriftpy.transport:TBufferedTransportFactory`'
+            '`thriftpy2.transport:TCyBufferedTransportFactory`, '
+            '`thriftpy2.transport:TBufferedTransportFactory`'
             )
 
 
