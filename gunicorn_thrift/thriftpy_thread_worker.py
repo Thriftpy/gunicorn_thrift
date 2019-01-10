@@ -5,12 +5,14 @@
 # which is released under the MIT license.
 #
 
+# The difference is that there's no default value for client timeout.
+# If `thrift_client_timeout` is not provided, connection will be alive forever
+
 import socket
 import errno
 import time
 
 from functools import partial
-from collections import deque
 
 from thriftpy2.transport import TSocket
 from thriftpy2.transport import TTransportException
@@ -18,20 +20,7 @@ from thriftpy2.protocol.exc import TProtocolException
 from thriftpy2.protocol.cybin import ProtocolError
 from thriftpy2.thrift import TDecodeException
 
-from gunicorn.workers.gthread import ThreadWorker
-
-try:
-    import concurrent.futures as futures
-except ImportError:
-    raise RuntimeError("""
-    You need to install the 'futures' package to use this worker with this
-    Python version.
-    """)
-
-try:
-    from asyncio import selectors
-except ImportError:
-    from gunicorn import selectors
+from gunicorn.workers.gthread import ThreadWorker, selectors
 
 from .utils import (
     ProcessorMixin,
@@ -118,48 +107,6 @@ class ThriftpyThreadWorker(ThreadWorker, ProcessorMixin):
     def check_config(cls, cfg, log):
         super(ThriftpyThreadWorker, cls).check_config(cfg, log)
         check_protocol_and_transport_for_thriftpy_woker(cfg)
-
-    def run(self):
-        # init listeners, add them to the event loop
-        for s in self.sockets:
-            s.setblocking(False)
-            self.poller.register(s, selectors.EVENT_READ, self.accept)
-
-        timeout = self.cfg.timeout or 0.5
-
-        while self.alive:
-            # notify the arbiter we are alive
-            self.notify()
-
-            # can we accept more connections?
-            if self.nr < self.worker_connections:
-                # wait for an event
-                events = self.poller.select(0.02)
-                for key, mask in events:
-                    callback = key.data
-                    callback(key.fileobj)
-
-            if not self.is_parent_alive():
-                break
-
-            # hanle keepalive timeouts
-            self.murder_keepalived()
-
-            # if the number of connections is < to the max we can handle at
-            # the same time there is no need to wait for one
-            if len(self.futures) < self.cfg.threads:
-                continue
-
-            result = futures.wait(self.futures, timeout=timeout,
-                                  return_when=futures.FIRST_COMPLETED)
-
-            if not result.done:
-                break
-            else:
-                [self.futures.remove(f) for f in result.done]
-
-        self.tpool.shutdown(False)
-        self.poller.close()
 
     def accept(self, listener):
         try:
