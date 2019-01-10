@@ -110,17 +110,6 @@ class TThreadClient(object):
 
 
 class ThriftpyThreadWorker(ThreadWorker, ProcessorMixin):
-    def __init__(self, *args, **kwargs):
-        super(ThriftpyThreadWorker, self).__init__(*args, **kwargs)
-        self.worker_connections = self.cfg.worker_connections
-        self.max_keepalived = self.cfg.worker_connections - self.cfg.threads
-        # initialise the pool
-        self.tpool = None
-        self.poller = None
-        self._lock = None
-        self.futures = deque()
-        self._keep = deque()
-
     def init_process(self):
         self.log.info("Starting thread worker, threads: %s", self.cfg.threads)
         return super(ThriftpyThreadWorker, self).init_process()
