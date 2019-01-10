@@ -3,12 +3,13 @@
 
 from gunicorn import six
 from gunicorn.config import Setting, validate_string, validate_pos_int,\
-    WorkerClass, validate_callable, validate_bool, validate_dict
+    WorkerClass, validate_callable, validate_bool, validate_dict, WorkerThreads
 
 from .six import DEFAULT_WORKER, DEFAULT_TRANSPORT, DEFAULT_PROTOCOL
 
 
 WorkerClass.default = DEFAULT_WORKER
+WorkerThreads.default = 10
 
 
 class ThriftTransportFactoryClass(Setting):

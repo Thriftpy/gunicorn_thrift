@@ -96,6 +96,7 @@ There are 4 types of workers available.
 * `thrift_gevent`: gevent worker.
 * `thriftpy_sync`: sync worker, adapted for [`thriftpy2`](https://github.com/thriftpy/thriftpy2)
 * `thriftpy_gevent`: gevent worker, adapted for [`thriftpy2`](https://github.com/thriftpy/thriftpy2)
+* `thriftpy_thread`: thread worker, adapted for [`thriftpy2`](https://github.com/thriftpy/thriftpy2)
 
 note: If you want to use `thriftpy_sync` or `thriftpy_gevent`, make sure the following:
 
@@ -107,6 +108,13 @@ note: If you want to use `thriftpy_sync` or `thriftpy_gevent`, make sure the fol
     1. `thriftpy2.transport:TCyBufferedTransportFactory` or
     1. `thriftpy2.transport:TBufferedTransportFactory`
 
+### Threads
+
+How many threads per worker. Only effective when using `thriftpy_thread` worker.
+
+Parameter: `--threads`
+Config file: `threads`
+Default: 10
 
 ### Transport factory
 
