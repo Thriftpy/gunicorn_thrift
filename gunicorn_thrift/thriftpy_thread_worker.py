@@ -120,6 +120,7 @@ class ThriftpyThreadWorker(ThreadWorker, ProcessorMixin):
             conn = TThreadClient(
                 self.app, client, addr, self.get_thrift_processor()
                 )
+            self.nr += 1
             self.put_back_to_ioloop(conn)
         except socket.error as e:
             if e.args[0] not in (
