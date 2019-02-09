@@ -15,6 +15,7 @@ if PY_VERSION <= (2, 8, 0):
         'thrift_gevent': 'gunicorn_thrift.gevent_worker.GeventThriftWorker',
         'thriftpy_sync': 'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
         'thriftpy_gevent': 'gunicorn_thrift.thriftpy_gevent_worker.GeventThriftPyWorker',
+        'thriftpy_thread': 'gunicorn_thrift.thriftpy_thread_worker.ThriftpyThreadWorker',
         }
 else:
     DEFAULT_WORKER = "thriftpy_sync"
@@ -23,4 +24,5 @@ else:
     AVAILABLE_WORKERS = {
         'thriftpy_sync': 'gunicorn_thrift.thriftpy_sync_worker.SyncThriftPyWorker',
         'thriftpy_gevent': 'gunicorn_thrift.thriftpy_gevent_worker.GeventThriftPyWorker',
+        'thriftpy_thread': 'gunicorn_thrift.thriftpy_thread_worker.ThriftpyThreadWorker',
         }

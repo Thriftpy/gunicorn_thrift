@@ -214,6 +214,73 @@ def volatile_pingpong_thriftpy_server_sync(request):
 
     return gunicorn_server
 
+#
+# thriftpy thread worker fixtures
+#
+
+
+@pytest.fixture
+def volatile_pingpong_thriftpy_server_thread(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_config.py", "--bind", "0.0.0.0:8004", "-k",
+         "thriftpy_thread", "--thrift-protocol-factory",
+         "thriftpy2.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factory",
+         "thriftpy2.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture(scope="session")
+def pingpong_thriftpy_server_thread(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_config.py", "-k", "thriftpy_thread",
+         "--thrift-protocol-factory",
+         "thriftpy2.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factory",
+         "thriftpy2.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
+
+@pytest.fixture(scope="session")
+def timeout_pingpong_thriftpy_server_thread(request, make_test_thrift):
+    gunicorn_server = subprocess.Popen(
+        ["gunicorn_thrift", "tests.thriftpy_app:app", "-c",
+         "tests/gunicorn_timeout_config.py", "-k", "thriftpy_thread",
+         "--thrift-protocol-factory",
+         "thriftpy2.protocol:TBinaryProtocolFactory",
+         "--thrift-transport-factory",
+         "thriftpy2.transport:TBufferedTransportFactory",
+         "--log-file", "-"],
+        )
+
+    def shutdown():
+        os.kill(gunicorn_server.pid, signal.SIGTERM)
+
+    request.addfinalizer(shutdown)
+    time.sleep(1)
+
+    return gunicorn_server
+
 
 #
 # thriftpy gevent worker fixtures

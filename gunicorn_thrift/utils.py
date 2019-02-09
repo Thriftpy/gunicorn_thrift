@@ -36,3 +36,23 @@ class ProcessorMixin(object):
         return self.app.thrift_app.get_processor() if \
             self.app.cfg.thrift_processor_as_factory else \
             self.app.thrift_app
+
+
+def check_protocol_and_transport_for_thriftpy_woker(cfg):
+    if not cfg.thrift_protocol_factory.startswith('thriftpy'):
+        raise AppImportError(
+            'Thriftpy worker can only use protocol from thriftpy,'
+            'specify `thrift_protocol_factory` as one of the '
+            'following:'
+            '`thriftpy2.protocol:TCyBinaryProtocolFactory`, '
+            '`thriftpy2.protocol:TBinaryProtocolFactory`'
+            )
+
+    if not cfg.thrift_transport_factory.startswith('thriftpy'):
+        raise AppImportError(
+            'Thriftpy worker can only use transport from thriftpy,'
+            'specify `thrift_transport_factory` as one of the '
+            'following:'
+            '`thriftpy2.transport:TCyBufferedTransportFactory`, '
+            '`thriftpy2.transport:TBufferedTransportFactory`'
+            )

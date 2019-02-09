@@ -23,7 +23,7 @@ except RuntimeError:
                        'gevent is not installed')
 
 try:
-    import thriftpy2
+    import thriftpy2  # noqa
 except ImportError:
     raise RuntimeError('`thriftpy_gevent` worker is unavailable because '
                        'thriftpy2 is not installed')
@@ -35,10 +35,12 @@ from thriftpy2.protocol.exc import TProtocolException
 from thriftpy2.protocol.cybin import ProtocolError
 from thriftpy2.thrift import TDecodeException
 
-from gunicorn.errors import AppImportError
 from gunicorn.workers.ggevent import GeventWorker
 
-from .utils import ProcessorMixin
+from .utils import (
+    ProcessorMixin,
+    check_protocol_and_transport_for_thriftpy_woker,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -58,26 +60,6 @@ def __get_real_function(module, name):
 _real_sleep = __get_real_function(time, 'sleep')
 _real_start_new_thread = __get_real_function(thread, 'start_new_thread')
 _real_get_ident = __get_real_function(thread, 'get_ident')
-
-
-def check_protocol_and_transport(app):
-    if not app.cfg.thrift_protocol_factory.startswith('thriftpy'):
-        raise AppImportError(
-            'Thriftpy worker can only use protocol from thriftpy,'
-            'specify `thrift_protocol_factory` as one of the '
-            'following:'
-            '`thriftpy2.protocol:TCyBinaryProtocolFactory`, '
-            '`thriftpy2.protocol:TBinaryProtocolFactory`'
-            )
-
-    if not app.cfg.thrift_transport_factory.startswith('thriftpy'):
-        raise AppImportError(
-            'Thriftpy worker can only use transport from thriftpy,'
-            'specify `thrift_transport_factory` as one of the '
-            'following:'
-            '`thriftpy2.transport:TCyBufferedTransportFactory`, '
-            '`thriftpy2.transport:TBufferedTransportFactory`'
-            )
 
 
 class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
@@ -154,7 +136,7 @@ class GeventThriftPyWorker(GeventWorker, ProcessorMixin):
         self._greenlet_switch_counter = 0
 
     def run(self):
-        check_protocol_and_transport(self.app)
+        check_protocol_and_transport_for_thriftpy_woker(self.app.cfg)
         super(GeventThriftPyWorker, self).run()
 
     def handle(self, listener, client, addr):
