@@ -6,7 +6,6 @@ import os
 import thriftpy2
 from thriftpy2.thrift import TProcessor
 
-from . import AboutToShutDownException
 
 pingpong_thrift = thriftpy2.load(
     os.path.join(
@@ -20,7 +19,7 @@ PingService = pingpong_thrift.PingService
 class PingpongServer(object):
     def ping(self):
         if os.environ.get('about_to_shutdown') == '1':
-            raise AboutToShutDownException
+            raise pingpong_thrift.AboutToShutDownException
         return "pong"
 
 
