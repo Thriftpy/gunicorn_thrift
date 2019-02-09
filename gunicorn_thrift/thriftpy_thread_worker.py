@@ -44,7 +44,7 @@ class TThreadClient(object):
         self.iprot = self.app.pfactory.get_protocol(self.itrans)
         self.oprot = self.app.pfactory.get_protocol(self.otrans)
 
-        self.last_used = 0
+        self.last_used = time.time()
 
         self.client_timeout = self.app.cfg.thrift_client_timeout
 
@@ -68,6 +68,10 @@ class TThreadClient(object):
     def process_single_rpc(self):
         keepalive = False
         try:
+            if self.is_expired():
+                self.close()
+                raise socket.timeout
+
             self.t_processor.process(self.iprot, self.oprot)
             keepalive = True
         except TTransportException:
