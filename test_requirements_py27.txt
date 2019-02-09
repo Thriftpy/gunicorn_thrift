@@ -2,3 +2,4 @@ pytest
 pytest-cov
 gevent==1.2.2
 thrift==0.9.3
+futures==3.2.0
