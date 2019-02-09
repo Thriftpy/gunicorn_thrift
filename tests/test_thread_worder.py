@@ -30,7 +30,7 @@ class TestThriftThreadWorker:
         protocol = TBinaryProtocol.TBinaryProtocolAccelerated(transport)
         transport.open()
         server = PingService.Client(protocol)
-        time.sleep(5)
+        time.sleep(2)
         with pytest.raises(TSocket.TTransportException):
             assert 'pong' == server.ping()
             transport.close()

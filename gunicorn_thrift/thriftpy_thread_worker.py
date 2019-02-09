@@ -120,8 +120,7 @@ class ThriftpyThreadWorker(ThreadWorker, ProcessorMixin):
             conn = TThreadClient(
                 self.app, client, addr, self.get_thrift_processor()
                 )
-            # enqueue the job
-            self.enqueue_req(conn)
+            self.put_back_to_ioloop(conn)
         except socket.error as e:
             if e.args[0] not in (
                     errno.EAGAIN, errno.ECONNABORTED, errno.EWOULDBLOCK):
@@ -135,6 +134,16 @@ class ThriftpyThreadWorker(ThreadWorker, ProcessorMixin):
         self.cfg.worker_term(self)
         return ret
 
+    def put_back_to_ioloop(self, conn):
+        conn.before_put_into_ioloop()
+
+        with self._lock:
+            self._keep.append(conn)
+
+            # add the socket to the event loop
+            self.poller.register(conn.sock, selectors.EVENT_READ,
+                                 partial(self.reuse_connection, conn))
+
     def finish_request(self, fs):
         if fs.cancelled():
             fs.conn.close()
@@ -145,14 +154,7 @@ class ThriftpyThreadWorker(ThreadWorker, ProcessorMixin):
             # if the connection should be kept alived add it
             # to the eventloop and record it
             if keepalive:
-                conn.before_put_into_ioloop()
-
-                with self._lock:
-                    self._keep.append(conn)
-
-                    # add the socket to the event loop
-                    self.poller.register(conn.sock, selectors.EVENT_READ,
-                                         partial(self.reuse_connection, conn))
+                self.put_back_to_ioloop(conn)
             else:
                 self.nr -= 1
                 conn.close()
