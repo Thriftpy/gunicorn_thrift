@@ -60,3 +60,6 @@ target/
 
 # Mr.developer ignores
 venv
+.venv
+
+tests/pingpong_sdk
