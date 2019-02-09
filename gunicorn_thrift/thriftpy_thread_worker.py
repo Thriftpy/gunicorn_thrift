@@ -68,10 +68,6 @@ class TThreadClient(object):
     def process_single_rpc(self):
         keepalive = False
         try:
-            if self.is_expired():
-                self.close()
-                raise socket.timeout
-
             self.t_processor.process(self.iprot, self.oprot)
             keepalive = True
         except TTransportException:
