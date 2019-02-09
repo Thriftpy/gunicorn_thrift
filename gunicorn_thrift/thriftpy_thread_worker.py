@@ -157,8 +157,16 @@ class ThriftpyThreadWorker(ThreadWorker, ProcessorMixin):
             if keepalive:
                 self.put_back_to_ioloop(conn)
             else:
-                self.nr -= 1
+                # remove the socket from the poller
+                with self._lock:
+                    try:
+                        self.poller.unregister(conn.sock)
+                    except socket.error as e:
+                        if e.args[0] != errno.EBADF:
+                            raise
+
                 conn.close()
+                self.nr -= 1
         except Exception:
             # an exception happened, make sure to close the
             # socket.
