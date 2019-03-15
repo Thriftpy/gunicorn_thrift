@@ -4,10 +4,8 @@ python:
   - 3.4
   - 3.5
   - 3.6
-  - 3.7
-    dist: xenial
-    sudo: true
 
+dist: xenial
 sudo: required
 install:
   - pip install tox-travis
