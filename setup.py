@@ -18,9 +18,10 @@ CLASSIFIERS = [
     'Operating System :: POSIX',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3.2',
-    'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
     'Topic :: Utilities',
     'Topic :: Software Development :: Libraries :: Python Modules',
 ]
@@ -30,8 +31,8 @@ PY_VERSION = sys.version_info[:3]
 # read dev requirements
 if PY_VERSION < (2, 7, 0):
     raise RuntimeError('Python < 2.7 is unsupported')
-elif PY_VERSION >= (3, 0, 0) and PY_VERSION < (3, 2, 0):
-    raise RuntimeError('Python 3 < 3.2 is unsupported')
+elif PY_VERSION >= (3, 0, 0) and PY_VERSION < (3, 4, 0):
+    raise RuntimeError('Python 3 < 3.4 is unsupported')
 
 if PY_VERSION[0] == 2:
     fname = os.path.join(os.path.dirname(__file__), 'requirements_py27.txt')

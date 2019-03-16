@@ -1,27 +1,30 @@
 language: python
 sudo: required
+dist: xenial
+
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=py27
+    - python: 3.4
+      env: TOXENV=py34
+    - python: 3.5
+      env: TOXENV=py35
+    - python: 3.6
+      env: TOXENV=py36
+    - python: 3.7
+      env: TOXENV=py37
+
 install:
   - pip install tox
-env:
-  - TOXENV=py27
-  - TOXENV=py34
-  - TOXENV=py35
+
 script:
   - tox
 
-cache:
-  directories:
-    - thrift-0.9.3
-
 before_install:
-  - pyenv global system 3.5
-  - ls "thrift-0.9.3" | grep "bootstrap.sh" || wget https://github.com/apache/thrift/archive/0.9.3.tar.gz -O thrift.tar.gz
-  - ls "thrift-0.9.3" | grep "bootstrap.sh" || tar xf thrift.tar.gz
-  - cd thrift-0.9.3
-  - ./bootstrap.sh
-  - ./configure --without-haskell --without-java --without-php --without-nodejs --without-cpp --without-lua --without-perl --without-ruby --without-erlang --without-rust --without-c_glib --without-go
-  - make
-  - sudo make install
+  - sudo apt-get update
+  - sudo apt-get install -y thrift-compiler
+
 after_success:
   - pip install python-coveralls
   - coveralls
