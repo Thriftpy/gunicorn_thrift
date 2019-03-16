@@ -15,7 +15,7 @@ Thrift app and worker for gunicorn! Hence, a multi-process python thrift server!
 ## Supported Platforms
 
 * Python 2.7, all worker classes
-* Python 3.2+, `thriftpy_sync` and `thriftpy_gevent` worker classes (code generated
+* Python 3.4+, `thriftpy_sync` and `thriftpy_gevent` worker classes (code generated
   using the Thrift toolkit is not supported on Python 3)
 
 ## Examples
@@ -51,7 +51,7 @@ Thrift app and worker for gunicorn! Hence, a multi-process python thrift server!
     % gunicorn_thrift tests.app:app -k thrift_gevent
     ```
 
-### Using `thriftpy`
+### Using `thriftpy2`
 
 1. Write thrift app.
 
@@ -88,7 +88,7 @@ Thrift app and worker for gunicorn! Hence, a multi-process python thrift server!
 Parameter: `-k`, `--worker-class`
 Config file: `worker_class`
 Default 2.7: `thrift_sync`
-Default 3.2+: `thriftpy_sync`
+Default 3.4+: `thriftpy_sync`
 
 There are 4 types of workers available.
 
@@ -115,7 +115,7 @@ The transport factory to use for handling connections.
 Parameter: `--thrift-transport-factory`  
 Config file: `thrift_transport_factory`  
 Default 2.7: `thrift.transport.TTransport:TBufferedTransportFactory`  
-Default 3.2+: `thriftpy2.transport:TBufferedTransportFactory`
+Default 3.4+: `thriftpy2.transport:TBufferedTransportFactory`
 
 
 ### Protocol factory
@@ -125,7 +125,7 @@ The protocol factory to use for parsing requests.
 Parameter: `--thrift-protocol-factory`  
 Config file: `thrift_protocol_factory`  
 Default 2.7: `thrift.protocol.TBinaryProtocol:TBinaryProtocolAcceleratedFactory`  
-Default 3.2+: `thriftpy2.protocol:TBinaryProtocolFactory`
+Default 3.4+: `thriftpy2.protocol:TBinaryProtocolFactory`
 
 ### Client timeout
 
