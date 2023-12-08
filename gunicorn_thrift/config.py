@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-from gunicorn import six
 from gunicorn.config import Setting, validate_string, validate_pos_int,\
     WorkerClass, validate_callable, validate_bool, validate_dict
 
@@ -59,7 +58,7 @@ class WorkerTerm(Setting):
     name = "worker_term"
     section = "Server Hooks"
     validator = validate_callable(1)
-    type = six.callable
+    type = callable
 
     def worker_term(worker):
         pass
@@ -78,7 +77,7 @@ class ClientConnected(Setting):
     name = "on_connected"
     section = "Server Hooks"
     validator = validate_callable(2)
-    type = six.callable
+    type = callable
 
     def on_connected(worker, addr):
         pass
@@ -96,7 +95,7 @@ class TDecodeExceptionRaised(Setting):
     name = "on_tdecode_exception"
     section = "Server Hooks"
     validator = validate_callable(1)
-    type = six.callable
+    type = callable
 
     def on_tdecode_exception(err):
         pass
@@ -113,7 +112,7 @@ class ClientConnectClosed(Setting):
     name = "post_connect_closed"
     section = "Server Hooks"
     validator = validate_callable(1)
-    type = six.callable
+    type = callable
 
     def post_connect_closed(worker):
         pass
