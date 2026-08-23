@@ -4,6 +4,10 @@ gunicorn_thrift
 [![Build Status](https://travis-ci.org/Thriftpy/gunicorn_thrift.svg?branch=master)](https://travis-ci.org/Thriftpy/gunicorn_thrift)
 [![Coverage Status](https://coveralls.io/repos/github/Thriftpy/gunicorn_thrift/badge.svg?branch=master)](https://coveralls.io/github/Thriftpy/gunicorn_thrift?branch=master)
 
+> **⚠️ DEPRECATED**
+>
+> This project is no longer maintained. [thriftpy2](https://github.com/Thriftpy/thriftpy2) now ships its own gunicorn worker class, so there is no need for a separate package. Please use the worker provided by thriftpy2 instead.
+
 Thrift app and worker for gunicorn! Hence, a multi-process python thrift server!
 
 ## Why?
